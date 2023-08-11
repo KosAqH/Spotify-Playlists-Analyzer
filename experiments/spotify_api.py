@@ -8,7 +8,7 @@ class SpotifyApi:
     def GetPlaylistInfo(self, id: str) -> dict:
         r = requests.get(f"https://api.spotify.com/v1/playlists/{id}", headers=self._headers)
         return r.json()
-    
+        
     def GetTracksMetadata(self, ids: list) -> list:
         ids = ','.join(ids)
         r = requests.get(f"https://api.spotify.com/v1/tracks?ids={ids}", headers=self._headers)
