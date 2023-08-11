@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="column is-8 is-offset-2">  
+    <h3 class="title">Insert your URL</h3>
+    <div class="box">
+        <form method="POST" name="url_form" action="/index_post">
+            <div class="field is-horizontal has-addons ">
+                <div class="control has-addons is-expanded">
+                    {{ url_form.csrf_token }}
+                    {{ url_form.url(class_ = "input") }}
+                </div>
+                <div class="control">
+                    <button class="button is-info">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -10,7 +10,7 @@ app.config['SECRET_KEY'] = 'this-shouldnt-be-here-in-real-app'
 
 # db.init_app(app) only for db
 
-from app.models import Task
+#from app.models import Task
 
 from . import views
 
