@@ -47,11 +47,12 @@ class SpotifyApi:
         """
         offset = 0
         result = []
-        while total_count > offset:
-            if total_count < self._SHORT_LIMIT:
-                offset = total_count
-            
-            r = requests.get(f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?limit={limit}&offset={offset}", headers=api._headers)
+
+        # if total_count < self._SHORT_LIMIT:
+        #     offset = total_count
+
+        while total_count > offset:          
+            r = requests.get(f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?limit={self._SHORT_LIMIT}&offset={offset}", headers=self._headers)
 
             for t in r.json()["items"]:
                 result.append(t["track"]["id"])
