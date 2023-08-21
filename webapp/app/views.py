@@ -18,8 +18,11 @@ def index():
 def index_post():
     token = get_spotify_access_token()
     api = SpotifyApi(token)
-    p = api.GetPlaylistInfo("387OhCc6mEbm96wzfFfhpp")
 
+    p = api.RequestPlaylist("71mFAErIZDf0h18roaz9oq")  # 387OhCc6mEbm96wzfFfhpp
+    print(len(api.retrieveIdsFromPlaylist(p)))
+
+    # p = api.GetPlaylistInfo("387OhCc6mEbm96wzfFfhpp")
     d = api.RetrievePlaylistMetadata(p)
 
     print(d)

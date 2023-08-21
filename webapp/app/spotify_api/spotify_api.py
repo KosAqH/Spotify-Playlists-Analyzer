@@ -1,4 +1,5 @@
 import requests
+import pandas as pd
 
 class SpotifyApi:
     def __init__(self, access_token):
@@ -6,11 +7,6 @@ class SpotifyApi:
         self._headers = {'Authorization': 'Bearer {}'.format(access_token)}
         self._LONG_LIMIT = 100
         self._SHORT_LIMIT = 50
-
-    def GetPlaylistInfo(self, id: str) -> dict:
-        #delete it later -?
-        r = requests.get(f"https://api.spotify.com/v1/playlists/{id}", headers=self._headers)
-        return r.json()
     
     def GetTracksMetadata(self, ids: list) -> list:
         ids = ','.join(ids)
@@ -44,43 +40,33 @@ class SpotifyApi:
             json_response += r.json()
         
         return json_response
-
-    # def requestSongsMetadata(self, songs_ids) -> list[dict]:
-    #     if type(songs_ids) == str:
-    #         return self.requestSongsMetadataByPlaylist(songs_ids)
-    #     elif type(songs_ids) == list:
-    #         return self.requestSongsMetadataByList(songs_ids)
-    #     else:
-    #         return False
-        
-    # def requestSongsMetadataByPlaylist(self, playlist_id: str) -> list[dict]:
-    #     r = requests.get(f"https://api.spotify.com/v1/playlists/{id}", headers=self._headers)
-    #     return r.json()
-
-    def requestSongsMetadataByList(self, songs_ids: list) -> list[dict]:
-        offset = 0
-        audio_features = []
-        while len(songs_ids) > offset:
-            r = requests.get(
-                f"https://api.spotify.com/v1/audio-features?ids={','.join(songs_ids[offset:self._SHORT_LIMIT+offset])}", 
-                headers=self._headers)
-            offset += self._SHORT_LIMIT
-            audio_features += r.json()["audio_features"]
-        
-        return audio_features
     
-    def retrieveIdsFromPlaylist(self, playlist: dict) -> list:
-        track_ids = []
-        for t in playlist["tracks"]["items"]:
-            track_ids.append(t["track"]["id"])
-        return track_ids
+    def retrieveIdsFromPlaylist(self, playlist_id: str, total_count: int) -> list[str]:
+        """
+        DONE
+        """
+        offset = 0
+        result = []
+        while total_count > offset:
+            if total_count < self._SHORT_LIMIT:
+                offset = total_count
+            
+            r = requests.get(f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?limit={limit}&offset={offset}", headers=api._headers)
+
+            for t in r.json()["items"]:
+                result.append(t["track"]["id"])
+            offset += 50 
+        return result
     
     def retrieveSongsAudioFeatures(self, songs_ids: list) -> list[dict]:
+        """
+        DONE
+        """
         offset = 0
         audio_features = []
         while len(songs_ids) > offset:
             r = requests.get(
-                f"https://api.spotify.com/v1/audio-features?ids={','.join(songs_ids[offset:self._SHORT_LIMIT+offset])}", 
+                f"https://api.spotify.com/v1/audio-features?ids={','.join(songs_ids[offset:self._LONG_LIMIT+offset])}", 
                 headers=self._headers)
             offset += self._SHORT_LIMIT
             audio_features += r.json()["audio_features"]
@@ -88,19 +74,24 @@ class SpotifyApi:
         return audio_features
 
     def retrieveSongsMetadata(self, songs_ids: list) -> list[dict]:
+        """
+        DONE
+        """
         offset = 0
-        audio_features = []
+        audio_metadata = []
         while len(songs_ids) > offset:
             r = requests.get(
                 f"https://api.spotify.com/v1/tracks?ids={','.join(songs_ids[offset:self._SHORT_LIMIT+offset])}", 
                 headers=self._headers)
             offset += self._SHORT_LIMIT
-            audio_features += r.json()["tracks"]
+            audio_metadata += r.json()["tracks"]
         
-        return audio_features
+        return audio_metadata
     
     def RetrievePlaylistMetadata(self, playlist: dict) -> dict:
-
+        """
+        DONE
+        """
         d = {
                 "name": playlist['name'],
                 "creator": playlist["owner"]["display_name"],
@@ -110,9 +101,3 @@ class SpotifyApi:
             }
         
         return d
-    
-    def GetPlaylistsSongsIds(self, dict) -> None:
-        pass
-
-    def GetPlaylistsSongsStats():
-        pass
