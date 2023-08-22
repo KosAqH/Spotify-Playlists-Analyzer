@@ -6,11 +6,15 @@ class AudioData:
 
     def mergeTracksData(self, df_metadata: pd.DataFrame, df_features: pd.DataFrame) -> pd.DataFrame:
         # new_df = df_metadata.merge(df_features, on="id")
-        new_df = df_metadata.merge(df_features, left_index=True, right_index=True)
+        cols_to_use = df_features.columns.difference(df_metadata.columns) #avoiding duplicates
+        new_df = df_metadata.merge(df_features[cols_to_use], 
+                                   left_index=True, 
+                                   right_index=True,
+                                   )
         return new_df
     
     def GetTotalDuration(self, df: pd.DataFrame, unit = "second") -> float:
-        duration = df["duration_ms_x"].sum() 
+        duration = df["duration_ms"].sum() 
 
         if unit == "second" or unit == "s":
             return duration / 1000
