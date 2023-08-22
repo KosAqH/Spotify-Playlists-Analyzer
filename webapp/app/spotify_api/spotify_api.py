@@ -57,7 +57,7 @@ class SpotifyApi:
             r = requests.get(
                 f"https://api.spotify.com/v1/audio-features?ids={','.join(songs_ids[offset:self._LONG_LIMIT+offset])}", 
                 headers=self._headers)
-            offset += self._SHORT_LIMIT
+            offset += self._LONG_LIMIT
             audio_features += r.json()["audio_features"]
         
         return audio_features
