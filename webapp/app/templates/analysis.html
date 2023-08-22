@@ -16,11 +16,25 @@ Most popular genres: {{ playlist_info['top_genre'] }}
 Most popular albums: {{ playlist_info['top_album'] }}
 
 <hr>
-<div id='chart' class='chart'”></div>
+<div id='chart' class='chart'></div>
 
 <script type='text/javascript'>
     var graphs = {{ graph | safe }};
     Plotly.plot('chart',graphs,{});
-  </script>
+</script>
+
+{% for stat in statistics_data %}
+   {{ stat["name"] }} <br>
+   {{ stat["top_values"]}}
+   {{ stat["top_index"]}}
+
+   <div id='{{ stat["name"] }}plot' class='{{ stat["name"] }}plot'></div>
+
+   <script type='text/javascript'>
+    var graphs = {{ stat["plot"] | safe }};
+    Plotly.plot('{{ stat["name"] }}plot',graphs,{});
+    </script>
+{% endfor %}
+
 
 {% endblock %}
