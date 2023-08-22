@@ -29,18 +29,6 @@ class SpotifyApi:
         r = requests.get(f"https://api.spotify.com/v1/playlists/{id}", headers=self._headers)
         return r.json()
     
-    def requestSongsAudioFeatures(self, songs_ids: list) -> list[dict]:
-        offset = 0
-        json_response = {}
-        while len(songs_ids) > offset:
-            r = requests.get(
-                f"https://api.spotify.com/v1/audio-features?ids={','.join(songs_ids[offset:self._LONG_LIMIT+offset])}", 
-                headers=self._headers)
-            offset += self._LONG_LIMIT
-            json_response += r.json()
-        
-        return json_response
-    
     def retrieveIdsFromPlaylist(self, playlist_id: str, total_count: int) -> list[str]:
         """
         DONE
@@ -87,6 +75,13 @@ class SpotifyApi:
             offset += self._SHORT_LIMIT
             audio_metadata += r.json()["tracks"]
         
+        for d in audio_metadata:
+            # print(d["album"])
+            d["album_name"] = d["album"]["name"]
+            d["album_id"] = d["album"]["id"]
+            d["genres"] = "unknown" #TO DO  - probably need to do another API calls
+            d["artist_name"] = d["artists"][0]["name"]
+
         return audio_metadata
     
     def RetrievePlaylistMetadata(self, playlist: dict) -> dict:
