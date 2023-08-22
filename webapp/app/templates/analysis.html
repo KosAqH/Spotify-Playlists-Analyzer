@@ -2,6 +2,23 @@
 
 {% block content %}
 
-marek siudym
+<h1>{{ playlist_info['name'] }}</h1>
+<h3>by {{ playlist_info['creator'] }}</h3>
+<img src="{{ playlist_info['img_url']}}" width="200" height="200">
+Total count: {{ playlist_info['total_count'] }}
+
+<hr>
+
+Most popular artists:
+Most popular genres:
+Most popular albums:
+
+<hr>
+<div id='chart' class='chart'”></div>
+
+<script type='text/javascript'>
+    var graphs = {{ graph | safe }};
+    Plotly.plot('chart',graphs,{});
+  </script>
 
 {% endblock %}
