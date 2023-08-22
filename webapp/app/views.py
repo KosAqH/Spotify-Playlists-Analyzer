@@ -8,6 +8,7 @@ import json
 from .spotify_api.spotify_connection import SpotifyConn
 from .spotify_api.spotify_api import SpotifyApi
 from .spotify_api.spotify_utils import load_credentials, load_playlist_info
+from .spotify_api.audio_data import AudioData
 
 
 # main = Blueprint('main', __name__) only for blueprints
@@ -23,16 +24,21 @@ def index_post():
     token = get_spotify_access_token()
     api = SpotifyApi(token)
 
-    p = api.RequestPlaylist("3vFJuKtDQCYkFSrpUaf5Dh")  # 387OhCc6mEbm96wzfFfhpp
+    p = api.RequestPlaylist("387OhCc6mEbm96wzfFfhpp")
     playlist_meta = api.RetrievePlaylistMetadata(p)
 
-    ids = api.retrieveIdsFromPlaylist("3vFJuKtDQCYkFSrpUaf5Dh", playlist_meta["total_count"])
+    ids = api.retrieveIdsFromPlaylist("387OhCc6mEbm96wzfFfhpp", playlist_meta["total_count"])
 
     tracks_info = load_playlist_info(api, ids)
 
     fig = px.scatter(tracks_info, x="valence", y="danceability", size = "popularity", hover_data=['artist_name', 'name'])
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
+    ad = AudioData()
+    playlist_meta["total_duration"] = round(ad.GetTotalDuration(tracks_info, unit="min"))
+    playlist_meta["top_artist"] = getTop(tracks_info, "artist_name", 1)
+    playlist_meta["top_album"] = getTop(tracks_info, "album_name", 1)
+    playlist_meta["top_genre"] = "placeholder"
 
     return render_template('analysis.html', playlist_info = playlist_meta, tracks_info = tracks_info, graph=graphJSON)
 
@@ -40,6 +46,29 @@ def index_post():
 def analysis():
     print("analysis")
     return render_template('analysis.html')
+
+
+
+##### MOVE IT TO OTHER FILE LATER
+
+def getStats():
+    pass
+
+def getTop(df, column, topn, add_exaquo = False):
+    max_value = df[column].value_counts().max()
+    if max_value == 1:
+        return {}
+    
+    keys = list(df[column].value_counts().head(topn).index)
+    values = list(df[column].value_counts().head(topn).values)
+
+    if add_exaquo:
+        s = df[column].value_counts()[(df[column].value_counts() == values[-1]) & (~df[column].value_counts().index.isin(keys))]
+        values += (list(s.values))
+        keys += (list(s.index))
+
+    return dict(zip(keys, values))
+
 
 def get_spotify_access_token():
     api_key, api_secret = load_credentials()

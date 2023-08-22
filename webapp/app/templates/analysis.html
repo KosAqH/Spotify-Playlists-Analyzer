@@ -5,13 +5,15 @@
 <h1>{{ playlist_info['name'] }}</h1>
 <h3>by {{ playlist_info['creator'] }}</h3>
 <img src="{{ playlist_info['img_url']}}" width="200" height="200">
-Total count: {{ playlist_info['total_count'] }}
+Total count: {{ playlist_info['total_count'] }} <br>
+Total duration: {{ playlist_info['total_duration'] }} minutes.
+
 
 <hr>
 
-Most popular artists:
-Most popular genres:
-Most popular albums:
+Most popular artists: {{ playlist_info['top_artist'] }}
+Most popular genres: {{ playlist_info['top_genre'] }}
+Most popular albums: {{ playlist_info['top_album'] }}
 
 <hr>
 <div id='chart' class='chart'”></div>
