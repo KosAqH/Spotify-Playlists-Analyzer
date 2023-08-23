@@ -26,7 +26,11 @@ Most popular albums: {{ playlist_info['top_album'] }}
 {% for stat in statistics_data %}
    {{ stat["name"] }} <br>
    {{ stat["top_values"]}}
-   {{ stat["top_index"]}}
+   {{ stat["top_artists"]}}
+   {{ stat["top_titles"]}}
+   {{ stat["bot_values"] }}
+   {{ stat["bot_artists"] }}
+   {{ stat["bot_titles"] }}
 
    <div id='{{ stat["name"] }}plot' class='{{ stat["name"] }}plot'></div>
 
