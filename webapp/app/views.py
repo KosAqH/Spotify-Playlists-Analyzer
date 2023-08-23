@@ -1,9 +1,11 @@
 from . import app
-from flask import render_template, redirect
+from flask import render_template, redirect, request
 from app.forms import SpotifyURL
 import plotly.express as px
 import plotly
 import json
+import pandas as pd
+import re
 
 from .spotify_api.spotify_connection import SpotifyConn
 from .spotify_api.spotify_api import SpotifyApi
@@ -20,14 +22,22 @@ def index():
 
 @app.route("/index_post", methods=["POST"])
 def index_post():
+
+    if request.form.get('url'):
+        url = request.form.get('url')
+        id = extractIdFromURL(url)
+        if not id:
+            id = url
+
+
     #TODO load id from form
     token = get_spotify_access_token()
     api = SpotifyApi(token)
 
-    p = api.RequestPlaylist("387OhCc6mEbm96wzfFfhpp")
+    p = api.RequestPlaylist(id)
     playlist_meta = api.RetrievePlaylistMetadata(p)
 
-    ids = api.retrieveIdsFromPlaylist("387OhCc6mEbm96wzfFfhpp", playlist_meta["total_count"])
+    ids = api.retrieveIdsFromPlaylist(id, playlist_meta["total_count"])
 
     tracks_info = load_playlist_info(api, ids)
 
@@ -80,17 +90,12 @@ def getSpotifyStatistic(df, stat_name):
     }
     return d
 
-def getTopNumerical(df, column, topn, add_exaquo = False, get_bottom = False):
+def getTopNumerical(df: pd.DataFrame, column: str, topn: int, add_exaquo = False, get_bottom = False):
 
     extracted_data = df.sort_values(by=column, ascending = get_bottom).head(topn)[["name", "artist_name", column]]
     values = extracted_data[column].to_list()
     artists = extracted_data["artist_name"].to_list()
     titles = extracted_data["name"].to_list()
-    print(artists)
-    print(titles)
-    print(values)
-
-    
 
     if add_exaquo:
         s = df[column].value_counts()[(df[column].value_counts() == values[-1]) & (~df[column].value_counts().index.isin(keys))]
@@ -115,6 +120,14 @@ def getTop(df, column, topn, add_exaquo = False):
 
     return dict(zip(keys, values))
 
+def extractIdFromURL(url: str) -> str:
+    pattern = "(?<=playlist/).*(?=\?)" 
+    # looking for all chars between 'playlist/' phrase and '?' char
+    match = re.search(pattern, url)
+    if match:
+        return match.group()
+    else:
+        return url
 
 def get_spotify_access_token():
     api_key, api_secret = load_credentials()
