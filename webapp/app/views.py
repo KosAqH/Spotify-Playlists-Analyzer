@@ -45,9 +45,11 @@ def index_post():
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
     ad = AudioData()
-    playlist_meta["total_duration"] = round(ad.GetTotalDuration(tracks_info, unit="min"))
-    playlist_meta["top_artist"] = getTop(tracks_info, "artist_name", 1)
-    playlist_meta["top_album"] = getTop(tracks_info, "album_name", 1)
+    playlist_meta["total_minutes"] = round(ad.GetTotalDuration(tracks_info, unit="min"))
+    playlist_meta["hours"] = playlist_meta["total_minutes"] // 60
+    playlist_meta["minutes"] = playlist_meta["total_minutes"] % 60
+    playlist_meta["top_artist"] = getTop(tracks_info, "artist_id", 3, api)
+    playlist_meta["top_album"] = getTop(tracks_info, "album_id", 3, api)
     playlist_meta["top_genre"] = "placeholder"
 
     statistics = ["tempo", "valence", "energy"]
@@ -55,11 +57,15 @@ def index_post():
     statistics_data = []
     for s in statistics:
         statistics_data.append(getSpotifyStatistic(tracks_info, s))
+    
+    spotify_url = SpotifyURL()
 
     return render_template('analysis.html', 
                            playlist_info = playlist_meta, 
                            statistics_data = statistics_data, 
-                           graph=graphJSON)
+                           graph=graphJSON,
+                           url_form = spotify_url #temporary
+                           )
 
 @app.route("/analysis")
 def analysis():
@@ -105,13 +111,20 @@ def getTopNumerical(df: pd.DataFrame, column: str, topn: int, add_exaquo = False
     return artists, titles, values
 
 
-def getTop(df, column, topn, add_exaquo = False):
+def getTop(df: pd.DataFrame, column, topn, api: SpotifyApi, add_exaquo = False):
     max_value = df[column].value_counts().max()
     if max_value == 1:
         return {}
     
+    extracted_data = df[column].value_counts().head(topn)
     keys = list(df[column].value_counts().head(topn).index)
     values = list(df[column].value_counts().head(topn).values)
+
+    if column == "artist_id":
+        api.retrieveArtistMetadata(keys)
+    elif column == "album_id":
+        api.retrieveAlbumMetadata(keys)
+
 
     if add_exaquo:
         s = df[column].value_counts()[(df[column].value_counts() == values[-1]) & (~df[column].value_counts().index.isin(keys))]

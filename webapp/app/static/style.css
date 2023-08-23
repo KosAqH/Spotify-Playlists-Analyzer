@@ -1,0 +1,19 @@
+figure {
+    overflow: hidden;
+}
+
+.img-playlist-cover figure img{
+    width: 80%;
+    border-radius: 5%;
+    border-width: 1%;
+
+    -webkit-transform: scale(1);
+	transform: scale(1);
+    -webkit-transition: .3s ease-in-out;
+	transition: .3s ease-in-out;
+}
+
+.img-playlist-cover figure:hover img{
+    -webkit-transform: scale(1.3);
+	transform: scale(1.3);
+}

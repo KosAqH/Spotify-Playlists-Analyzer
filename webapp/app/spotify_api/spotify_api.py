@@ -29,6 +29,32 @@ class SpotifyApi:
         r = requests.get(f"https://api.spotify.com/v1/playlists/{id}", headers=self._headers)
         return r.json()
     
+    def retrieveArtistMetadata(self, artist_ids: list[str]) -> dict:
+        r = requests.get(f"https://api.spotify.com/v1/artists?ids={','.join(artist_ids)}", headers=self._headers)
+        
+        d = {}
+        for artist in r.json()["artists"]:
+            d[artist["name"]] = {
+                "url_photo": artist["images"][0]["url"],
+                "id": artist["id"],
+                "genres": artist["genres"]
+            }
+            
+        return d
+
+    def retrieveAlbumMetadata(self, album_ids: list[str]) -> dict:
+        r = requests.get(f"https://api.spotify.com/v1/albums?ids={','.join(album_ids)}", headers=self._headers)
+        d = {}
+        for album in r.json()["albums"]:
+            d[album["name"]] = {
+                "artist": album["artists"][0]["name"],
+                "id": album["id"],
+                "url_photo": album["images"][0]["url"],
+                "genres": album["genres"]
+            }
+            
+        return d
+
     def retrieveIdsFromPlaylist(self, playlist_id: str, total_count: int) -> list[str]:
         """
         DONE
@@ -81,6 +107,7 @@ class SpotifyApi:
             d["album_id"] = d["album"]["id"]
             d["genres"] = "unknown" #TO DO  - probably need to do another API calls
             d["artist_name"] = d["artists"][0]["name"]
+            d["artist_id"] = d["artists"][0]["id"]
 
         return audio_metadata
     
@@ -92,7 +119,6 @@ class SpotifyApi:
                 "name": playlist['name'],
                 "creator": playlist["owner"]["display_name"],
                 "total_count": playlist["tracks"]["total"],
-                "total_duration": 0,
                 "img_url": playlist["images"][0]["url"]
             }
         

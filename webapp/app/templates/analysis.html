@@ -1,44 +1,78 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="columns">
+<div class="column">
 
-<h1>{{ playlist_info['name'] }}</h1>
-<h3>by {{ playlist_info['creator'] }}</h3>
-<img src="{{ playlist_info['img_url']}}" width="200" height="200">
-Total count: {{ playlist_info['total_count'] }} <br>
-Total duration: {{ playlist_info['total_duration'] }} minutes.
+</div>
+<div class="column is-three-quarters">
+    <div name="input-playlist-id">
+        <form method="POST" name="url_form" action="/index_post">
+            <div class="field is-horizontal has-addons ">
+                <div class="control has-addons is-expanded">
+                    {{ url_form.csrf_token }}
+                    {{ url_form.url(class_ = "input") }}
+                </div>
+                <div class="control">
+                    <button class="button is-info">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
 
+    <div name="playlist-info" class="columns">
+        <div class="column is-one-third">
+            <div class="img-playlist-cover">
+                <figure>
+                    <img src="{{ playlist_info['img_url']}}">
+                </figure>
+            </div>
+        </div>
+        <div class="column has-text-left">
+            <p class = "title is-1"> {{ playlist_info['name'] }} </p>
+            <p class = "subtitle is-3"> created by {{ playlist_info['creator'] }}</p>
+            <p> Total count: {{ playlist_info['total_count'] }} tracks. </p>
+            <p> Total duration: {{ playlist_info['hours'] }} hours and {{ playlist_info['minutes'] }} minutes. </p>
+        </div>
+    </div>
 
-<hr>
+    <div name="top-info" class="columns">
+        <div class="column">
+            <p class = "title is-2"> Top artists </p>
+            {{ playlist_info['top_artist'] }}
+        </div>
+        <div class="column">
+            <p class = "title is-2"> Top albums </p>
+            {{ playlist_info['top_album'] }}
+        </div>
+    </div>
 
-Most popular artists: {{ playlist_info['top_artist'] }}
-Most popular genres: {{ playlist_info['top_genre'] }}
-Most popular albums: {{ playlist_info['top_album'] }}
+    <div name="audio-parameters">
+        {% for stat in statistics_data %}
+            {{ stat["name"] }} <br>
+            {{ stat["top_values"]}}
+            {{ stat["top_artists"]}}
+            {{ stat["top_titles"]}}
+            {{ stat["bot_values"] }}
+            {{ stat["bot_artists"] }}
+            {{ stat["bot_titles"] }}
 
-<hr>
-<div id='chart' class='chart'></div>
+            <div id='{{ stat["name"] }}plot' class='{{ stat["name"] }}plot'></div>
 
-<script type='text/javascript'>
-    var graphs = {{ graph | safe }};
-    Plotly.plot('chart',graphs,{});
-</script>
+            <script type='text/javascript'>
+                var graphs = {{ stat["plot"] | safe }};
+                var data = graphs["data"];
+                var layout = graphs["layout"];
+                var config = {responsive: true}
+                Plotly.newPlot('{{ stat["name"] }}plot',data, layout, config=config);
+                
+            </script>
+                
+        {% endfor %}
+    </div>
+</div>
+<div class="column">
 
-{% for stat in statistics_data %}
-   {{ stat["name"] }} <br>
-   {{ stat["top_values"]}}
-   {{ stat["top_artists"]}}
-   {{ stat["top_titles"]}}
-   {{ stat["bot_values"] }}
-   {{ stat["bot_artists"] }}
-   {{ stat["bot_titles"] }}
-
-   <div id='{{ stat["name"] }}plot' class='{{ stat["name"] }}plot'></div>
-
-   <script type='text/javascript'>
-    var graphs = {{ stat["plot"] | safe }};
-    Plotly.plot('{{ stat["name"] }}plot',graphs,{});
-    </script>
-{% endfor %}
-
-
+</div>
+</div>
 {% endblock %}
