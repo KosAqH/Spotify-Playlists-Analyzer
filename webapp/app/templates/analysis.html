@@ -45,12 +45,27 @@
                         <img src="{{ playlist_info['top_artist'][0]['url_photo']}}">
                     </figure>
                 </div>
-
-                <p class="title is-3"> {{ playlist_info['top_artist'][0]["name"] }} </p>
             
-                {% for artist in playlist_info['top_artist'][1:] %}
-                    <p>{{ artist["name"] }}</p>
-                {% endfor %}
+                <table class="top-table">
+                    <thead>
+                        <tr> 
+                            <td> 1. </td> 
+                            <td> {{ playlist_info['top_artist'][0]["name"] }}</td>
+                            <td> {{ playlist_info['top_artist'][0]["count"] }} tracks. </td>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for artist in playlist_info['top_artist'][1:] %}
+                            <tr> 
+                                <td> {{ loop.index+1 }}. </td> 
+                                <td> {{ artist["name"] }}.</td>
+                                <td> {{ artist["count"] }} tracks.</td>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
 
             </div>
             <div class="column">
@@ -62,33 +77,64 @@
                     </figure>
                 </div>
 
-                {% for album in playlist_info['top_album'] %}
-                    <ol> {{ album["name"] }}</ul>
-                {% endfor %}
+                <table class="top-table">
+                    <thead>
+                        <tr> 
+                            <td> 1. </td> 
+                            <td> {{ playlist_info['top_album'][0]["name"] }} by {{ playlist_info['top_album'][0]["artist"] }}</td>
+                            <td> {{ playlist_info['top_album'][0]["count"] }} tracks. </td>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for album in playlist_info['top_album'][1:] %}
+                            <tr> 
+                                <td> {{ loop.index+1 }}. </td> 
+                                <td> {{ album["name"] }} by {{ album["artist"]}}. </td>
+                                <td> {{ album["count"] }} tracks.</td>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
 
         <div name="audio-parameters">
             {% for stat in statistics_data %}
-                {{ stat["name"] }} <br>
-                {{ stat["top_values"]}}
-                {{ stat["top_artists"]}}
-                {{ stat["top_titles"]}}
-                {{ stat["bot_values"] }}
-                {{ stat["bot_artists"] }}
-                {{ stat["bot_titles"] }}
+                <div class="block">
+                    <div>
+                        {{ stat["name"] }} <br>
+                        {{ stat["top_values"]}}
+                        {{ stat["top_artists"]}}
+                        {{ stat["top_titles"]}}
+                        {{ stat["bot_values"] }}
+                        {{ stat["bot_artists"] }}
+                        {{ stat["bot_titles"] }}
+                    </div>
 
-                <div id='{{ stat["name"] }}plot' class='{{ stat["name"] }}plot'></div>
-
-                <script type='text/javascript'>
-                    var graphs = {{ stat["plot"] | safe }};
-                    var data = graphs["data"];
-                    var layout = graphs["layout"];
-                    var config = {responsive: true}
-                    Plotly.newPlot('{{ stat["name"] }}plot',data, layout, config=config);
+                    <div class="columns">
+                        <div class="column">
+                            Top 3
+                        </div>
+                        <div class="column is-two-thirds">
+                            <div id='{{ stat["name"] }}plot' class='{{ stat["name"] }}plot'></div>
+    
+                            <script type='text/javascript'>
+                                var graphs = {{ stat["plot"] | safe }};
+                                var data = graphs["data"];
+                                var layout = graphs["layout"];
+                                var config = {responsive: true}
+                                Plotly.newPlot('{{ stat["name"] }}plot',data, layout, config=config);
+                                
+                            </script>
+                        </div>
+                        <div class="column">
+                            Bottom 3
+                        </div>
+                    </div>  
                     
-                </script>
-                    
+                </div>                    
             {% endfor %}
         </div>
     </div>

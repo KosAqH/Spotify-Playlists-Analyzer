@@ -2,6 +2,20 @@ figure {
     overflow: hidden;
 }
 
+.top-table {
+    background-color: transparent;
+    border-spacing: 15px;
+
+}
+
+.top-table td {
+    padding: 0 5px 0 5px;
+}
+
+.top-table thead td {
+    font-size: x-large;
+}
+
 .img-playlist-cover figure img{
     width: 80%;
     border-radius: 5%;
