@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="column is-three-quarters is-offset-2">
+    <div name="input-playlist-id" class="block">
+        <form method="POST" name="url_form" action="/p_comp_post">
+            <div class="field is-horizontal has-addons ">
+                <div class="control has-addons is-expanded">
+                    {{ url_form.csrf_token }}
+                    {{ url_form.url1(class_ = "input") }}
+                    {{ url_form.url2(class_ = "input") }}
+                </div>
+                <div class="control">
+                    <button class="button is-info">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

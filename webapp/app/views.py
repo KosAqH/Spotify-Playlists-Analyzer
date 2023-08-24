@@ -1,6 +1,6 @@
 from . import app
 from flask import render_template, redirect, request
-from app.forms import SpotifyURL
+from app.forms import SpotifyURL, SpotifyDoubleURL
 import plotly.express as px
 import plotly
 import json
@@ -29,8 +29,6 @@ def index_post():
         if not id:
             id = url
 
-
-    #TODO load id from form
     token = get_spotify_access_token()
     api = SpotifyApi(token)
 
@@ -52,7 +50,7 @@ def index_post():
     playlist_meta["top_album"] = getTop(tracks_info, "album_id", 3, api)
     playlist_meta["top_genre"] = "placeholder"
 
-    statistics = ["duration_ms", "tempo", "acousticness", "danceability", "energy", "instrumentalness", "valence"]
+    statistics = ["duration_ms", "tempo", "acousticness", "danceability", "energy", "instrumentalness", "loudness", "valence"]
 
     statistics_data = []
     for s in statistics:
@@ -72,6 +70,19 @@ def analysis():
     print("analysis")
     return render_template('analysis.html')
 
+@app.route("/p_comp")
+def playlists_comparison():
+    spotify_url = SpotifyDoubleURL()
+
+
+    return render_template('playlists_comparison.html',
+                           url_form = spotify_url)
+
+@app.route("/p_comp_post", methods=["POST"])
+def playlists_comparison_post():
+    spotify_url = SpotifyDoubleURL()
+    return render_template('playlists_comparison.html',
+                           url_form = spotify_url)
 
 
 ##### MOVE IT TO OTHER FILE LATER
