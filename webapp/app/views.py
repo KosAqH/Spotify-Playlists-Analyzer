@@ -36,11 +36,7 @@ def index_post():
     playlist_meta = api.RetrievePlaylistMetadata(p)
 
     ids = api.retrieveIdsFromPlaylist(id, playlist_meta["total_count"])
-
     tracks_info = load_playlist_info(api, ids)
-
-    fig = px.scatter(tracks_info, x="valence", y="danceability", size = "popularity", hover_data=['artist_name', 'name'])
-    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
     ad = AudioData()
     playlist_meta["total_minutes"] = round(ad.GetTotalDuration(tracks_info, unit="min"))
@@ -61,7 +57,6 @@ def index_post():
     return render_template('analysis.html', 
                            playlist_info = playlist_meta, 
                            statistics_data = statistics_data, 
-                           graph=graphJSON,
                            url_form = spotify_url #temporary
                            )
 
