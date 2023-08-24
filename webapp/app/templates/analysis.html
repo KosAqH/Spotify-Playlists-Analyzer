@@ -119,14 +119,9 @@
                         </div>
                         <div class="column is-two-thirds">
                             <div id='{{ stat["name"] }}plot' class='{{ stat["name"] }}plot'></div>
-    
-                            <script type='text/javascript'>
-                                var graphs = {{ stat["plot"] | safe }};
-                                var data = graphs["data"];
-                                var layout = graphs["layout"];
-                                var config = {responsive: true}
-                                Plotly.newPlot('{{ stat["name"] }}plot',data, layout, config=config);
-                                
+
+                            <script type='text/javascript'>                               
+                                plotPlotly({{ stat["plot"] | safe }}, "{{ stat["name"] }}plot")
                             </script>
                         </div>
                         <div class="column">

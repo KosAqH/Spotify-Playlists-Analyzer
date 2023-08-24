@@ -9,6 +9,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" />
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
     <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+
+    <script type='text/javascript'>
+        function plotPlotly(graph, div_plot){
+            var data = graph["data"];
+            var layout = graph["layout"];
+            var config = {responsive: true}
+            Plotly.newPlot(div_plot, data, layout, config=config);
+        }
+        
+    </script>
 </head>
 
 <body>
