@@ -1,5 +1,8 @@
 figure {
     overflow: hidden;
+    aspect-ratio: 1;
+    width: 80%;
+    border-radius: 5%;
 }
 
 .top-table {
@@ -16,8 +19,12 @@ figure {
     font-size: x-large;
 }
 
+.img-playlist-cover {
+    overflow: hidden;
+    border-radius: 5%;
+}
 .img-playlist-cover figure img{
-    width: 80%;
+    width: 100%;
     border-radius: 5%;
     border-width: 1%;
     aspect-ratio: 1;
@@ -30,6 +37,7 @@ figure {
 }
 
 .img-playlist-cover figure:hover img{
-    -webkit-transform: scale(1.3);
-	transform: scale(1.3);
+    -webkit-transform: scale(1.2);
+	transform: scale(1.2);
+    border-radius: 5%;
 }
