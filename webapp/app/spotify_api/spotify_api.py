@@ -32,28 +32,30 @@ class SpotifyApi:
     def retrieveArtistMetadata(self, artist_ids: list[str]) -> dict:
         r = requests.get(f"https://api.spotify.com/v1/artists?ids={','.join(artist_ids)}", headers=self._headers)
         
-        d = {}
+        l = []
         for artist in r.json()["artists"]:
-            d[artist["name"]] = {
-                "url_photo": artist["images"][0]["url"],
+            l.append({
+                "name": artist["name"],
                 "id": artist["id"],
+                "url_photo": artist["images"][0]["url"],
                 "genres": artist["genres"]
-            }
+            })
             
-        return d
+        return l
 
-    def retrieveAlbumMetadata(self, album_ids: list[str]) -> dict:
+    def retrieveAlbumMetadata(self, album_ids: list[str]) -> list[dict]:
         r = requests.get(f"https://api.spotify.com/v1/albums?ids={','.join(album_ids)}", headers=self._headers)
-        d = {}
+        l = []
         for album in r.json()["albums"]:
-            d[album["name"]] = {
-                "artist": album["artists"][0]["name"],
+            l.append({
+                "name": album["name"],
                 "id": album["id"],
+                "artist": album["artists"][0]["name"],
                 "url_photo": album["images"][0]["url"],
                 "genres": album["genres"]
-            }
+            })
             
-        return d
+        return l
 
     def retrieveIdsFromPlaylist(self, playlist_id: str, total_count: int) -> list[str]:
         """

@@ -6,6 +6,8 @@ figure {
     width: 80%;
     border-radius: 5%;
     border-width: 1%;
+    aspect-ratio: 1;
+
 
     -webkit-transform: scale(1);
 	transform: scale(1);

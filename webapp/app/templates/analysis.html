@@ -6,7 +6,7 @@
 
 </div>
 <div class="column is-three-quarters">
-    <div name="input-playlist-id">
+    <div name="input-playlist-id" class="block">
         <form method="POST" name="url_form" action="/index_post">
             <div class="field is-horizontal has-addons ">
                 <div class="control has-addons is-expanded">
@@ -20,7 +20,7 @@
         </form>
     </div>
 
-    <div name="playlist-info" class="columns">
+    <div name="playlist-info" class="columns block">
         <div class="column is-one-third">
             <div class="img-playlist-cover">
                 <figure>
@@ -36,14 +36,35 @@
         </div>
     </div>
 
-    <div name="top-info" class="columns">
-        <div class="column">
+    <div name="top-info" class="columns block">
+        <div class="column is-half">
             <p class = "title is-2"> Top artists </p>
-            {{ playlist_info['top_artist'] }}
+
+            <div class="img-playlist-cover">
+                <figure>
+                    <img src="{{ playlist_info['top_artist'][0]['url_photo']}}">
+                </figure>
+            </div>
+
+            <p class="title is-3"> {{ playlist_info['top_artist'][0]["name"] }} </p>
+        
+            {% for artist in playlist_info['top_artist'][1:] %}
+                <p>{{ artist["name"] }}</p>
+            {% endfor %}
+
         </div>
         <div class="column">
             <p class = "title is-2"> Top albums </p>
-            {{ playlist_info['top_album'] }}
+
+            <div class="img-playlist-cover">
+                <figure>
+                    <img src="{{ playlist_info['top_album'][0]['url_photo']}}">
+                </figure>
+            </div>
+
+            {% for album in playlist_info['top_album'] %}
+                <ol> {{ album["name"] }}</ul>
+            {% endfor %}
         </div>
     </div>
 

@@ -120,18 +120,24 @@ def getTop(df: pd.DataFrame, column, topn, api: SpotifyApi, add_exaquo = False):
     keys = list(df[column].value_counts().head(topn).index)
     values = list(df[column].value_counts().head(topn).values)
 
-    if column == "artist_id":
-        api.retrieveArtistMetadata(keys)
-    elif column == "album_id":
-        api.retrieveAlbumMetadata(keys)
+    artist_meta = []
+    album_meta = []
 
+    if column == "artist_id":
+        artist_meta = api.retrieveArtistMetadata(keys)
+        for i, key in enumerate(keys):
+            artist_meta[i]["count"] = values[i]
+    elif column == "album_id":
+        album_meta = api.retrieveAlbumMetadata(keys)
+        for i, key in enumerate(keys):
+            album_meta[i]["count"] = values[i]
 
     if add_exaquo:
         s = df[column].value_counts()[(df[column].value_counts() == values[-1]) & (~df[column].value_counts().index.isin(keys))]
         values += (list(s.values))
         keys += (list(s.index))
 
-    return dict(zip(keys, values))
+    return artist_meta or album_meta
 
 def extractIdFromURL(url: str) -> str:
     pattern = "(?<=playlist/).*(?=\?)" 
