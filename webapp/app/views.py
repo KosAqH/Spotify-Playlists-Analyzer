@@ -52,7 +52,7 @@ def index_post():
     playlist_meta["top_album"] = getTop(tracks_info, "album_id", 3, api)
     playlist_meta["top_genre"] = "placeholder"
 
-    statistics = ["tempo", "valence", "energy"]
+    statistics = ["duration_ms", "tempo", "acousticness", "danceability", "energy", "instrumentalness", "valence"]
 
     statistics_data = []
     for s in statistics:
