@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="column is-three-quarters is-offset-2">
+    <div name="input-playlist-id" class="block">
+        <form method="POST" name="url_form" action="/p_comp_post">
+            <div class="field is-horizontal has-addons ">
+                <div class="control has-addons is-expanded">
+                    {{ url_form.csrf_token }}
+                    {{ url_form.url1(class_ = "input") }}
+                    {{ url_form.url2(class_ = "input") }}
+                </div>
+                <div class="control">
+                    <button class="button is-info">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- <div name="playlist-info" class="columns block">
+        <div class="column is-one-third">
+            <div class="img-playlist-cover">
+                <figure class="image is-inline-block">
+                    <img src="{{ playlists_info[0]['img_url']}}">
+                </figure>
+            </div>
+        </div>
+        <div class="column has-text-left">
+            <p class = "title is-1"> {{ playlists_info[0]['name'] }} </p>
+            <p class = "subtitle is-3"> created by {{ playlists_info[0]['creator'] }}</p>
+            <p> Total count: {{ playlists_info[0]['total_count'] }} tracks. </p>
+            <p> Total duration: {{ playlists_info[0]['hours'] }} hours and {{ playlists_info[0]['minutes'] }} minutes. </p>
+        </div>
+    </div>
+
+    <div name="playlist-info" class="columns block">
+        
+        <div class="column has-text-right">
+            <p class = "title is-1"> {{ playlists_info[1]['name'] }} </p>
+            <p class = "subtitle is-3"> created by {{ playlists_info[1]['creator'] }}</p>
+            <p> Total count: {{ playlists_info[1]['total_count'] }} tracks. </p>
+            <p> Total duration: {{ playlists_info[1]['hours'] }} hours and {{ playlists_info[1]['minutes'] }} minutes. </p>
+        </div>
+        <div class="column is-one-third">
+            <div class="img-playlist-cover">
+                <figure class="image is-inline-block">
+                    <img src="{{ playlists_info[1]['img_url']}}">
+                </figure>
+            </div>
+        </div>
+    </div> -->
+
+    <div name="playlist-info" class="columns block">
+        <div class="column is-half">
+            <div class="img-playlist-cover">
+                <figure class="image is-inline-block">
+                    <img src="{{ playlists_info[0]['img_url']}}">
+                </figure>
+            </div>
+        </div>
+        <div class="column is-half">
+            <div class="img-playlist-cover">
+                <figure class="image is-inline-block">
+                    <img src="{{ playlists_info[1]['img_url']}}">
+                </figure>
+            </div>
+        </div>
+    </div>
+
+    <div name="playlist-info" class="columns block">
+        <div class="column has-text-left">
+            <p class = "title is-1"> {{ playlists_info[0]['name'] }} </p>
+            <p class = "subtitle is-3"> created by {{ playlists_info[0]['creator'] }}</p>
+            <p> Total count: {{ playlists_info[0]['total_count'] }} tracks. </p>
+            <p> Total duration: {{ playlists_info[0]['hours'] }} hours and {{ playlists_info[0]['minutes'] }} minutes. </p>
+        </div>
+        <div class="column has-text-left">
+            <p class = "title is-1"> {{ playlists_info[1]['name'] }} </p>
+            <p class = "subtitle is-3"> created by {{ playlists_info[1]['creator'] }}</p>
+            <p> Total count: {{ playlists_info[1]['total_count'] }} tracks. </p>
+            <p> Total duration: {{ playlists_info[1]['hours'] }} hours and {{ playlists_info[1]['minutes'] }} minutes. </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -76,7 +76,39 @@ def playlists_comparison():
 @app.route("/p_comp_post", methods=["POST"])
 def playlists_comparison_post():
     spotify_url = SpotifyDoubleURL()
-    return render_template('playlists_comparison.html',
+    urls = []
+    playlists_meta = []
+
+    token = get_spotify_access_token()
+    api = SpotifyApi(token)
+
+    if request.form.get('url1') and request.form.get('url2'):
+        urls += [request.form.get('url1'), request.form.get('url2')]
+
+    print(urls)
+
+    for url in urls:
+        id = extractIdFromURL(url)
+        if not id:
+            id = url
+        p = api.RequestPlaylist(id)
+        playlist_meta = api.RetrievePlaylistMetadata(p)
+
+        ids = api.retrieveIdsFromPlaylist(id, playlist_meta["total_count"])
+        tracks_info = load_playlist_info(api, ids)
+
+        ad = AudioData()
+        playlist_meta["total_minutes"] = round(ad.GetTotalDuration(tracks_info, unit="min"))
+        playlist_meta["hours"] = playlist_meta["total_minutes"] // 60
+        playlist_meta["minutes"] = playlist_meta["total_minutes"] % 60
+        playlist_meta["top_artist"] = getTop(tracks_info, "artist_id", 3, api)
+        playlist_meta["top_album"] = getTop(tracks_info, "album_id", 3, api)
+        playlist_meta["top_genre"] = "placeholder"
+
+        playlists_meta.append(playlist_meta)
+
+    return render_template('playlists_comparison_post.html',
+                           playlists_info = playlists_meta,
                            url_form = spotify_url)
 
 
