@@ -78,14 +78,13 @@ def playlists_comparison_post():
     spotify_url = SpotifyDoubleURL()
     urls = []
     playlists_meta = []
+    dfs = []
 
     token = get_spotify_access_token()
     api = SpotifyApi(token)
 
     if request.form.get('url1') and request.form.get('url2'):
         urls += [request.form.get('url1'), request.form.get('url2')]
-
-    print(urls)
 
     for url in urls:
         id = extractIdFromURL(url)
@@ -96,6 +95,7 @@ def playlists_comparison_post():
 
         ids = api.retrieveIdsFromPlaylist(id, playlist_meta["total_count"])
         tracks_info = load_playlist_info(api, ids)
+        dfs.append(tracks_info)
 
         ad = AudioData()
         playlist_meta["total_minutes"] = round(ad.GetTotalDuration(tracks_info, unit="min"))
@@ -107,8 +107,15 @@ def playlists_comparison_post():
 
         playlists_meta.append(playlist_meta)
 
+    statistics = ["tempo"]
+
+    statistics_data = []
+    for s in statistics:
+        statistics_data.append(getSpotifyComparisonStatistic(dfs, s))
+
     return render_template('playlists_comparison_post.html',
                            playlists_info = playlists_meta,
+                           statistics_data = statistics_data,
                            url_form = spotify_url)
 
 
@@ -120,6 +127,33 @@ def getSpotifyStatistic(df, stat_name):
     bot_artists, bot_titles, bot_vals = getTopNumerical(df, stat_name, 3, get_bottom=True)
 
     fig = px.histogram(df, x=stat_name, nbins=10, marginal="violin")
+    figJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+    d={
+        "name": stat_name,
+        "top_artists": top_artists,
+        "top_values": top_vals,
+        "top_titles": top_titles,
+        "bot_artists": bot_artists,
+        "bot_values": bot_vals,
+        "bot_titles": bot_titles,
+        "plot": figJSON
+    }
+    return d
+
+def getSpotifyComparisonStatistic(dfs: list[pd.DataFrame], stat_name):
+    print(type(dfs[0]))
+    dfs[0]["no"] = 1
+    dfs[1]["no"] = 2
+
+    df = pd.concat([dfs[0], dfs[1]], axis=0)
+
+    top_artists, top_titles, top_vals = getTopNumerical(df, stat_name, 3)
+    bot_artists, bot_titles, bot_vals = getTopNumerical(df, stat_name, 3, get_bottom=True)
+
+    print(df.head())
+    print(df["no"].value_counts())
+    fig = px.histogram(df, x=stat_name, nbins=10, marginal="violin", opacity=0.75, color="no")
     figJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
     d={
