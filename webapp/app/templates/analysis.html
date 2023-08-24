@@ -2,98 +2,98 @@
 
 {% block content %}
 <div class="columns">
-<div class="column">
+    <div class="column">
 
-</div>
-<div class="column is-three-quarters">
-    <div name="input-playlist-id" class="block">
-        <form method="POST" name="url_form" action="/index_post">
-            <div class="field is-horizontal has-addons ">
-                <div class="control has-addons is-expanded">
-                    {{ url_form.csrf_token }}
-                    {{ url_form.url(class_ = "input") }}
+    </div>
+    <div class="column is-three-quarters">
+        <div name="input-playlist-id" class="block">
+            <form method="POST" name="url_form" action="/index_post">
+                <div class="field is-horizontal has-addons ">
+                    <div class="control has-addons is-expanded">
+                        {{ url_form.csrf_token }}
+                        {{ url_form.url(class_ = "input") }}
+                    </div>
+                    <div class="control">
+                        <button class="button is-info">Submit</button>
+                    </div>
                 </div>
-                <div class="control">
-                    <button class="button is-info">Submit</button>
+            </form>
+        </div>
+
+        <div name="playlist-info" class="columns block">
+            <div class="column is-one-third">
+                <div class="img-playlist-cover">
+                    <figure>
+                        <img src="{{ playlist_info['img_url']}}">
+                    </figure>
                 </div>
             </div>
-        </form>
-    </div>
-
-    <div name="playlist-info" class="columns block">
-        <div class="column is-one-third">
-            <div class="img-playlist-cover">
-                <figure>
-                    <img src="{{ playlist_info['img_url']}}">
-                </figure>
+            <div class="column has-text-left">
+                <p class = "title is-1"> {{ playlist_info['name'] }} </p>
+                <p class = "subtitle is-3"> created by {{ playlist_info['creator'] }}</p>
+                <p> Total count: {{ playlist_info['total_count'] }} tracks. </p>
+                <p> Total duration: {{ playlist_info['hours'] }} hours and {{ playlist_info['minutes'] }} minutes. </p>
             </div>
         </div>
-        <div class="column has-text-left">
-            <p class = "title is-1"> {{ playlist_info['name'] }} </p>
-            <p class = "subtitle is-3"> created by {{ playlist_info['creator'] }}</p>
-            <p> Total count: {{ playlist_info['total_count'] }} tracks. </p>
-            <p> Total duration: {{ playlist_info['hours'] }} hours and {{ playlist_info['minutes'] }} minutes. </p>
-        </div>
-    </div>
 
-    <div name="top-info" class="columns block">
-        <div class="column is-half">
-            <p class = "title is-2"> Top artists </p>
+        <div name="top-info" class="columns block">
+            <div class="column is-half">
+                <p class = "title is-2"> Top artists </p>
 
-            <div class="img-playlist-cover">
-                <figure>
-                    <img src="{{ playlist_info['top_artist'][0]['url_photo']}}">
-                </figure>
+                <div class="img-playlist-cover">
+                    <figure>
+                        <img src="{{ playlist_info['top_artist'][0]['url_photo']}}">
+                    </figure>
+                </div>
+
+                <p class="title is-3"> {{ playlist_info['top_artist'][0]["name"] }} </p>
+            
+                {% for artist in playlist_info['top_artist'][1:] %}
+                    <p>{{ artist["name"] }}</p>
+                {% endfor %}
+
             </div>
+            <div class="column">
+                <p class = "title is-2"> Top albums </p>
 
-            <p class="title is-3"> {{ playlist_info['top_artist'][0]["name"] }} </p>
-        
-            {% for artist in playlist_info['top_artist'][1:] %}
-                <p>{{ artist["name"] }}</p>
+                <div class="img-playlist-cover">
+                    <figure>
+                        <img src="{{ playlist_info['top_album'][0]['url_photo']}}">
+                    </figure>
+                </div>
+
+                {% for album in playlist_info['top_album'] %}
+                    <ol> {{ album["name"] }}</ul>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div name="audio-parameters">
+            {% for stat in statistics_data %}
+                {{ stat["name"] }} <br>
+                {{ stat["top_values"]}}
+                {{ stat["top_artists"]}}
+                {{ stat["top_titles"]}}
+                {{ stat["bot_values"] }}
+                {{ stat["bot_artists"] }}
+                {{ stat["bot_titles"] }}
+
+                <div id='{{ stat["name"] }}plot' class='{{ stat["name"] }}plot'></div>
+
+                <script type='text/javascript'>
+                    var graphs = {{ stat["plot"] | safe }};
+                    var data = graphs["data"];
+                    var layout = graphs["layout"];
+                    var config = {responsive: true}
+                    Plotly.newPlot('{{ stat["name"] }}plot',data, layout, config=config);
+                    
+                </script>
+                    
             {% endfor %}
-
-        </div>
-        <div class="column">
-            <p class = "title is-2"> Top albums </p>
-
-            <div class="img-playlist-cover">
-                <figure>
-                    <img src="{{ playlist_info['top_album'][0]['url_photo']}}">
-                </figure>
-            </div>
-
-            {% for album in playlist_info['top_album'] %}
-                <ol> {{ album["name"] }}</ul>
-            {% endfor %}
         </div>
     </div>
+    <div class="column">
 
-    <div name="audio-parameters">
-        {% for stat in statistics_data %}
-            {{ stat["name"] }} <br>
-            {{ stat["top_values"]}}
-            {{ stat["top_artists"]}}
-            {{ stat["top_titles"]}}
-            {{ stat["bot_values"] }}
-            {{ stat["bot_artists"] }}
-            {{ stat["bot_titles"] }}
-
-            <div id='{{ stat["name"] }}plot' class='{{ stat["name"] }}plot'></div>
-
-            <script type='text/javascript'>
-                var graphs = {{ stat["plot"] | safe }};
-                var data = graphs["data"];
-                var layout = graphs["layout"];
-                var config = {responsive: true}
-                Plotly.newPlot('{{ stat["name"] }}plot',data, layout, config=config);
-                
-            </script>
-                
-        {% endfor %}
     </div>
-</div>
-<div class="column">
-
-</div>
 </div>
 {% endblock %}
