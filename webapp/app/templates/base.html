@@ -8,6 +8,8 @@
     <title>spotify playlist analyzer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" />
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 
     <script type='text/javascript'>
@@ -23,6 +25,14 @@
 
 <body>
     <section class="hero is-primary is-fullheight">
+        <div class="tabs is-centered">
+            <ul>
+              <li><a href="{{ url_for('index') }}">Playlist analyse</a></li>
+              <li><a>Playlists comparison</a></li>
+              <li><a>Album comparison</a></li>
+              <li><a href="https://github.com/kosaqh"><i style="font-size:24px" class="fa">&#xf09b;</i></a></li>
+            </ul>
+          </div>
         <div class="hero-body">
             <div class="container has-text-centered">
                {% block content %}
