@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="column is-three-quarters is-offset-2">
+<div class="column is-10 is-offset-1">
     <div name="input-playlist-id" class="block">
         <form method="POST" name="url_form" action="/p_comp_post">
             <div class="field is-horizontal has-addons ">
@@ -84,7 +84,12 @@
     </div>
 
     <div class="content block">
-        blah blah there is n unique artists with n unique albums. On second playlist there is -//-. Songs from n artists appeared on both playlists. blah blah
+        <p> Playlist n1 contains songs of n unique artists and n unique albums. 
+            Playlist n2 contains songs of n unique artists and from n unique albums. 
+            Tracks made by n artists appear on both playlists.</p>
+        <p> Total number of n songs appear on playlist n1. Total number of n songs appear on playlist n2. There is n songs that
+            appear on both playlists.
+        </p>
     </div>
 
 
@@ -95,59 +100,18 @@
                     <p class = "title is-2">{{ stat["name"] |capitalize }} </p>
                     <p> Staty</p>
                 </div>
+                <div class="column">
+                    <div id='{{ stat["name"] }}plot' class='{{ stat["name"] }}plot'></div>
+
+                    <script type='text/javascript'>                               
+                        plotPlotly({{ stat["plot"] | safe }}, "{{ stat["name"] }}plot")
+                    </script>
+                </div>
 
                 <div class="columns">
-                    <!--<div class="column is-2">
-                        <table class="top-table">
-                            <thead>
-                                <tr> 
-                                    <td> 1. </td> 
-                                    <td> {{ stat["top_titles"][0] }} by {{ stat["top_artists"][0] }}</td>
-                                    <td> {{ stat["top_values"][0]}} </td>
-                                    </td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for i in range(1, stat["top_values"]|length) %}
-                                    <tr> 
-                                        <td> {{ i+1 }}</td> 
-                                        <td> {{ stat["top_titles"][i] }} by {{ stat["top_artists"][i] }}</td>
-                                        <td> {{ stat["top_values"][i]}} </td>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div> -->
-                    <div class="column is-two-thirds">
-                        <div id='{{ stat["name"] }}plot' class='{{ stat["name"] }}plot'></div>
-
-                        <script type='text/javascript'>                               
-                            plotPlotly({{ stat["plot"] | safe }}, "{{ stat["name"] }}plot")
-                        </script>
-                    </div>
-                    <!-- <div class="column is-2">
-                        <table class="top-table">
-                            <thead>
-                                <tr> 
-                                    <td> 1. </td> 
-                                    <td> {{ stat["bot_titles"][0] }} by {{ stat["bot_artists"][0] }}</td>
-                                    <td> {{ stat["bot_values"][0]}} </td>
-                                    </td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for i in range(1, stat["bot_values"]|length) %}
-                                    <tr> 
-                                        <td> {{ i+1 }}</td> 
-                                        <td> {{ stat["bot_titles"][i] }} by {{ stat["bot_artists"][i] }}</td>
-                                        <td> {{ stat["bot_values"][i]}} </td>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div> -->
+                    
+                    
+                    
                 </div>  
                 
             </div>                    
