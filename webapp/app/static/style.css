@@ -14,9 +14,13 @@ figure {
 .top-table td {
     padding: 0 5px 0 5px;
 }
+.top-table td:last-child{
+    text-align: right;
+}
 
 .top-table thead td {
-    font-size: x-large;
+    font-size: larger;
+    font-weight: bold;
 }
 
 .img-playlist-cover {
