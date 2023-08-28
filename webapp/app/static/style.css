@@ -58,3 +58,8 @@ figure {
 .blue-border figure{
     border-color: rgb(7, 47, 99);
 }
+
+.no-hover-links{
+    text-decoration: none; /* no underline */
+    color: inherit;
+}

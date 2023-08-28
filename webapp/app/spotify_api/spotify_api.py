@@ -123,7 +123,8 @@ class SpotifyApi:
                 "name": playlist['name'],
                 "creator": playlist["owner"]["display_name"],
                 "total_count": playlist["tracks"]["total"],
-                "img_url": playlist["images"][0]["url"]
+                "img_url": playlist["images"][0]["url"],
+                "url": playlist["external_urls"]["spotify"]
             }
         
         return d
