@@ -3,6 +3,7 @@ from flask import render_template, redirect, request
 from app.forms import SpotifyURL, SpotifyDoubleURL
 import plotly.express as px
 import plotly
+import plotly.figure_factory as ff
 import json
 import pandas as pd
 import re
@@ -107,11 +108,16 @@ def playlists_comparison_post():
 
         playlists_meta.append(playlist_meta)
 
-    statistics = ["tempo"]
+    statistics = ["duration_ms", "tempo", "acousticness", "danceability", "energy", "instrumentalness", "loudness", "valence"]
+
+    dfs[0]["no"] = 1
+    dfs[1]["no"] = 2
+
+    df = pd.concat([dfs[0], dfs[1]], axis=0)
 
     statistics_data = []
     for s in statistics:
-        statistics_data.append(getSpotifyComparisonStatistic(dfs, s))
+        statistics_data.append(getSpotifyComparisonStatistic(df, s))
 
     return render_template('playlists_comparison_post.html',
                            playlists_info = playlists_meta,
@@ -141,19 +147,20 @@ def getSpotifyStatistic(df, stat_name):
     }
     return d
 
-def getSpotifyComparisonStatistic(dfs: list[pd.DataFrame], stat_name):
-    print(type(dfs[0]))
-    dfs[0]["no"] = 1
-    dfs[1]["no"] = 2
-
-    df = pd.concat([dfs[0], dfs[1]], axis=0)
-
+def getSpotifyComparisonStatistic(df: pd.DataFrame, stat_name):
     top_artists, top_titles, top_vals = getTopNumerical(df, stat_name, 3)
     bot_artists, bot_titles, bot_vals = getTopNumerical(df, stat_name, 3, get_bottom=True)
 
     print(df.head())
     print(df["no"].value_counts())
-    fig = px.histogram(df, x=stat_name, nbins=10, marginal="violin", opacity=0.75, color="no")
+
+    l1 = df[df["no"] == 1][stat_name].to_list()
+    l2 = df[df["no"] == 2][stat_name].to_list()
+
+    fig = ff.create_distplot([l1, l2],
+                             ["p1", "p2"],
+                             bin_size=((top_vals[0]-bot_vals[0]) / 10) 
+        )
     figJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
     d={
