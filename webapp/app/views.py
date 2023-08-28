@@ -46,6 +46,7 @@ def index_post():
     playlist_meta["top_artist"] = getTop(tracks_info, "artist_id", 3, api)
     playlist_meta["top_album"] = getTop(tracks_info, "album_id", 3, api)
     playlist_meta["top_genre"] = "placeholder"
+    playlist_meta["total_count"] = tracks_info.shape[0]
 
     statistics = ["duration_ms", "tempo", "acousticness", "danceability", "energy", "instrumentalness", "loudness", "valence"]
 
@@ -105,6 +106,7 @@ def playlists_comparison_post():
         playlist_meta["top_artist"] = getTop(tracks_info, "artist_id", 3, api)
         playlist_meta["top_album"] = getTop(tracks_info, "album_id", 3, api)
         playlist_meta["top_genre"] = "placeholder"
+        playlist_meta["total_count"] = tracks_info.shape[0]
 
         playlists_meta.append(playlist_meta)
 
