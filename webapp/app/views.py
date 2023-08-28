@@ -137,8 +137,12 @@ def getSpotifyStatistic(df, stat_name):
     fig = px.histogram(df, x=stat_name, nbins=10, marginal="violin")
     figJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
+    stats_description = {}
+    with open(".\\data\\descriptions.json") as f:
+        stats_description = dict(json.load(f))
     d={
         "name": stat_name,
+        "desc": stats_description[stat_name],
         "top_artists": top_artists,
         "top_values": top_vals,
         "top_titles": top_titles,
@@ -165,8 +169,13 @@ def getSpotifyComparisonStatistic(df: pd.DataFrame, stat_name):
         )
     figJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
+    stats_description = {}
+    with open(".\\data\\descriptions.json") as f:
+        stats_description = dict(json.load(f))
+
     d={
         "name": stat_name,
+        "desc": stats_description[stat_name],
         "top_artists": top_artists,
         "top_values": top_vals,
         "top_titles": top_titles,
