@@ -110,28 +110,6 @@
                     </div>
 
                     <div class="columns">
-                        <!-- <div class="column is-2">
-                            <table class="top-table">
-                                <thead>
-                                    <tr> 
-                                        <td> 1. </td> 
-                                        <td> {{ stat["top_titles"][0] }} by {{ stat["top_artists"][0] }}</td>
-                                        <td> {{ stat["top_values"][0]}} </td>
-                                        </td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for i in range(1, stat["top_values"]|length) %}
-                                        <tr> 
-                                            <td> {{ i+1 }}</td> 
-                                            <td> {{ stat["top_titles"][i] }} by {{ stat["top_artists"][i] }}</td>
-                                            <td> {{ stat["top_values"][i]}} </td>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div> -->
                         <div class="column is-two-thirds">
                             <div id='{{ stat["name"] }}plot' class='{{ stat["name"] }}plot'></div>
 

@@ -120,7 +120,8 @@ def playlists_comparison_post():
     statistics_data = []
     for s in statistics:
         statistics_data.append(getSpotifyComparisonStatistic(df, s))
-
+    
+    print(len(statistics_data))
     return render_template('playlists_comparison_post.html',
                            playlists_info = playlists_meta,
                            statistics_data = statistics_data,
@@ -154,24 +155,44 @@ def getSpotifyStatistic(df, stat_name):
     return d
 
 def getSpotifyComparisonStatistic(df: pd.DataFrame, stat_name):
-    top_artists, top_titles, top_vals = getTopNumerical(df, stat_name, 3)
-    bot_artists, bot_titles, bot_vals = getTopNumerical(df, stat_name, 3, get_bottom=True)
-
-    print(df.head())
-    print(df["no"].value_counts())
+    df1 = df[df["no"] == 1].drop_duplicates('id')
+    df2 = df[df["no"] == 2].drop_duplicates('id')
 
     l1 = df[df["no"] == 1][stat_name].to_list()
     l2 = df[df["no"] == 2][stat_name].to_list()
 
+    top_val = df[stat_name].max()
+    bot_val = df[stat_name].min()
+
     fig = ff.create_distplot([l1, l2],
                              ["p1", "p2"],
-                             bin_size=((top_vals[0]-bot_vals[0]) / 10) 
+                             bin_size=((top_val-bot_val) / 10) 
         )
     figJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
     stats_description = {}
     with open(".\\data\\descriptions.json") as f:
         stats_description = dict(json.load(f))
+
+    top_artists = []
+    top_vals = []
+    top_titles = []
+    bot_artists = []
+    bot_vals = []
+    bot_titles = []
+
+
+
+    for df in [df1, df2]:
+        top_ar, top_ti, top_va = getTopNumerical(df, stat_name, 3)
+        bot_ar, bot_ti, bot_va = getTopNumerical(df, stat_name, 3, get_bottom=True)
+
+        top_artists.append(top_ar)
+        top_vals.append(top_va)
+        top_titles.append(top_ti)
+        bot_artists.append(bot_ar)
+        bot_vals.append(bot_va)
+        bot_titles.append(bot_ti)
 
     d={
         "name": stat_name,
@@ -184,6 +205,7 @@ def getSpotifyComparisonStatistic(df: pd.DataFrame, stat_name):
         "bot_titles": bot_titles,
         "plot": figJSON
     }
+
     return d
 
 def getTopNumerical(df: pd.DataFrame, column: str, topn: int, add_exaquo = False, get_bottom = False):
