@@ -206,6 +206,13 @@
             </div>                    
         {% endfor %}
     </div>
+    <div name="radar" id = "radar" class="block">
+        
+    </div>
+    <script type='text/javascript'>
+        plotPlotly({{ radar | safe }}, 'radar');
+    </script>
+    
     
 </div>
 

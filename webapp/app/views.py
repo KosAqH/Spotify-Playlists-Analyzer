@@ -4,6 +4,7 @@ from app.forms import SpotifyURL, SpotifyDoubleURL
 import plotly.express as px
 import plotly
 import plotly.figure_factory as ff
+import plotly.graph_objects as go
 import json
 import pandas as pd
 import re
@@ -121,14 +122,35 @@ def playlists_comparison_post():
     for s in statistics:
         statistics_data.append(getSpotifyComparisonStatistic(df, s))
     
-    print(len(statistics_data))
+    radar_plot = createRadarPlot(df)
     return render_template('playlists_comparison_post.html',
                            playlists_info = playlists_meta,
                            statistics_data = statistics_data,
+                           radar = radar_plot,
                            url_form = spotify_url)
 
 
 ##### MOVE IT TO OTHER FILE LATER
+
+def createRadarPlot(df):
+    columns = ["acousticness", "danceability", "energy", "instrumentalness", "valence"]
+    means1 = [df[df["no"]==1][col].mean() for col in columns]
+    # for col in columns:
+    #     means1.append(df[df["no"]==0][col].mean())
+    means2 = [df[df["no"]==2][col].mean() for col in columns]
+    # for col in columns:
+    #     means2.append(df[df["no"]==0][col].mean())
+
+    new_df = pd.DataFrame(columns=["means", "playlist"], index=columns*2)
+    new_df["means"] = means1+means2
+    new_df["playlist"] = [0,0,0,0,0,1,1,1,1,1]
+
+    fig = px.line_polar(new_df, r="means", theta = new_df.index, color="playlist", line_close=True, markers=True)
+    fig.update_traces(fill='toself')
+
+    figJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    return figJSON
+
 
 def getSpotifyStatistic(df, stat_name):
 
