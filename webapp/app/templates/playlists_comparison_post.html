@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% from 'macros.html' import render_top_table_comp %}
+
 {% block content %}
 
 <div class="column is-10 is-offset-1">
@@ -17,39 +19,6 @@
             </div>
         </form>
     </div>
-
-    <!-- <div name="playlist-info" class="columns block">
-        <div class="column is-one-third">
-            <div class="img-playlist-cover">
-                <figure class="image is-inline-block">
-                    <img src="{{ playlists_info[0]['img_url']}}">
-                </figure>
-            </div>
-        </div>
-        <div class="column has-text-left">
-            <p class = "title is-1"> {{ playlists_info[0]['name'] }} </p>
-            <p class = "subtitle is-3"> created by {{ playlists_info[0]['creator'] }}</p>
-            <p> Total count: {{ playlists_info[0]['total_count'] }} tracks. </p>
-            <p> Total duration: {{ playlists_info[0]['hours'] }} hours and {{ playlists_info[0]['minutes'] }} minutes. </p>
-        </div>
-    </div>
-
-    <div name="playlist-info" class="columns block">
-        
-        <div class="column has-text-right">
-            <p class = "title is-1"> {{ playlists_info[1]['name'] }} </p>
-            <p class = "subtitle is-3"> created by {{ playlists_info[1]['creator'] }}</p>
-            <p> Total count: {{ playlists_info[1]['total_count'] }} tracks. </p>
-            <p> Total duration: {{ playlists_info[1]['hours'] }} hours and {{ playlists_info[1]['minutes'] }} minutes. </p>
-        </div>
-        <div class="column is-one-third">
-            <div class="img-playlist-cover">
-                <figure class="image is-inline-block">
-                    <img src="{{ playlists_info[1]['img_url']}}">
-                </figure>
-            </div>
-        </div>
-    </div> -->
 
     <div name="playlist-info" class="columns block is-comp">
         <div class="column is-half red-border">
@@ -113,61 +82,16 @@
                     
                     <div class = "column is-half">
                         <p class="title is-4">Top values</p>
-                        <table class="table top-table is-fullwidth">
-                            <tbody>
-                                {% for i in range(stat["top_values"][0]|length) %}
-                                    <tr> 
-                                        <td> {{ i+1 }}. </td> 
-                                        <td> {{ stat["top_titles"][0][i] }} by {{ stat["top_artists"][0][i] }}</td>
-                                        <td> {{ stat["top_values"][0][i]}} </td>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>  
+                        {{ render_top_table_comp(stat, 0, "top_titles", "top_artists", "top_values") }}
                         <p class="title is-4">Lowest values</p>
-                            <table class="table top-table is-fullwidth">
-                                <tbody>
-                                    {% for i in range(stat["bot_values"][0]|length) %}
-                                        <tr> 
-                                            <td> {{ i+1 }}.</td> 
-                                            <td> {{ stat["bot_titles"][0][i] }} by {{ stat["bot_artists"][0][i] }}</td>
-                                            <td> {{ stat["bot_values"][0][i]}} </td>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                        {{ render_top_table_comp(stat, 0, "bot_titles", "bot_artists", "bot_values") }}
                     </div>
                     
                     <div class = "column is-half">
                         <p class="title is-4">Top values</p>
-                        <table class="table top-table is-fullwidth">
-
-                            <tbody>
-                                {% for i in range(stat["top_values"][1]|length) %}
-                                    <tr> 
-                                        <td> {{ i+1 }}. </td> 
-                                        <td> {{ stat["top_titles"][1][i] }} by {{ stat["top_artists"][1][i] }}</td>
-                                        <td> {{ stat["top_values"][1][i]}} </td>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>  
+                        {{ render_top_table_comp(stat, 1, "top_titles", "top_artists", "top_values") }}
                         <p class="title is-4">Lowest values</p>
-                            <table class="table top-table is-fullwidth">
-                                <tbody>
-                                    {% for i in range(stat["bot_values"][1]|length) %}
-                                        <tr> 
-                                            <td> {{ i+1 }}. </td> 
-                                            <td> {{ stat["bot_titles"][1][i] }} by {{ stat["bot_artists"][1][i] }}</td>
-                                            <td> {{ stat["bot_values"][1][i]}} </td>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                        {{ render_top_table_comp(stat, 1, "bot_titles", "bot_artists", "bot_values") }}
                     </div>
                 </div>  
 

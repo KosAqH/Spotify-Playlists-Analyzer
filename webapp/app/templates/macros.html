@@ -1,0 +1,25 @@
+{% macro render_top_table(stat, col1, col2, col3) -%}
+    <table class="table top-table is-fullwidth">
+        {% for i in range(stat[col1]|length) %}
+            <tr> 
+                <td> {{ i+1 }}. </td> 
+                <td> {{ stat[col1][i] }}
+                    <span class="band-name">{{ stat[col2][i] }}</span></td>
+                <td> {{ stat[col3][i]}} </td>
+            </tr>
+        {% endfor %}
+    </table>
+{%- endmacro %}
+
+{% macro render_top_table_comp(stat, no_playlist, col1, col2, col3) -%}
+    <table class="table top-table is-fullwidth">
+        {% for i in range(stat[col1][no_playlist]|length) %}
+            <tr> 
+                <td> {{ i+1 }}. </td> 
+                <td> {{ stat[col1][no_playlist][i] }}
+                        <span class="band-name">{{ stat[col2][no_playlist][i] }}</span></td>
+                    <td> {{ stat[col3][no_playlist][i]}} </td>
+            </tr>
+        {% endfor %}
+    </table>
+{%- endmacro %}
