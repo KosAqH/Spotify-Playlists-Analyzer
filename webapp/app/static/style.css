@@ -18,7 +18,7 @@ figure {
     text-align: right;
 }
 
-.top-table thead td {
+.top-table tr:first-child{
     font-size: larger;
     font-weight: bold;
 }
