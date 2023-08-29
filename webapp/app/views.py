@@ -20,7 +20,11 @@ from .spotify_api.audio_data import AudioData
 @app.route("/")
 def index():
     spotify_url = SpotifyURL()
-    return render_template('index.html', url_form = spotify_url)
+    spotify_double_url = SpotifyDoubleURL()
+
+    return render_template('index.html', 
+                           url_form_analysis = spotify_url, 
+                           url_form_comparison = spotify_double_url)
 
 @app.route("/index_post", methods=["POST"])
 def index_post():
@@ -65,7 +69,6 @@ def index_post():
 
 @app.route("/analysis")
 def analysis():
-    print("analysis")
     return render_template('analysis.html')
 
 @app.route("/p_comp")

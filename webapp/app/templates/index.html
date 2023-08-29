@@ -3,17 +3,41 @@
 {% block content %}
 
 <div class="column is-8 is-offset-2">  
-    <h3 class="title">Insert your URL</h3>
-    <div class="box">
+    <h3 class="title">Spotify playlists' analysis tool</h3>
+    <div class="box" id="form_analysis">
         <form method="POST" name="url_form" action="/index_post">
-            <div class="field is-horizontal has-addons ">
-                <div class="control has-addons is-expanded">
-                    {{ url_form.csrf_token }}
-                    {{ url_form.url(class_ = "input") }}
+            <div class="field is-vertical">
+                <div class="control is-expanded">
+                    <p class="title is-4 has-text-centered">Analyse one playlist</p>
+                    {{ url_form_analysis.csrf_token }}
+                    <div class="field">
+                        {{ url_form_analysis.url(class_ = "input") }}
+                    </div>
+                    <div class="field has-text-centered">
+                        <button class="button is-info has-text-centered">Submit</button>
+                    </div>
                 </div>
-                <div class="control">
-                    <button class="button is-info">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="box has-text-centered" id = "form_comparison">
+        <form method="POST" name="url_form" action="/p_comp_post">
+            <div class="field is-vertical">
+                <div class="control is-expanded">
+                    <p class="title is-4 has-text-centered">Compare two playlists</p>
+                    {{ url_form_comparison.csrf_token }}
+                    <div class="field">
+                        {{ url_form_comparison.url1(class_ = "input") }}
+                    </div>
+                    <div class="field">
+                        {{ url_form_comparison.url2(class_ = "input") }}
+                    </div>
+                    <div class="field has-text-centered">
+                        <button class="button is-info has-text-centered">Submit</button>
+                    </div>
                 </div>
+                
             </div>
         </form>
     </div>
