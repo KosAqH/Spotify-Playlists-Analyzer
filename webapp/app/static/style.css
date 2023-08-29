@@ -8,7 +8,13 @@ figure {
 .top-table {
     background-color: transparent;
     border-spacing: 15px;
+}
 
+.top-table span.band-name {
+    color:grey; 
+    /*font-style: italic;*/ 
+    font-weight:lighter; 
+    display:block;
 }
 
 .top-table td {

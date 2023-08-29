@@ -74,7 +74,8 @@
                         {% for album in playlist_info['top_album'] %}
                             <tr> 
                                 <td> {{ loop.index }}. </td> 
-                                <td> {{ album["name"] }} by {{ album["artist"]}}. </td>
+                                <td> {{ album["name"] }} 
+                                    <span class="band-name">{{ album["artist"]}}.</span> </td>
                                 <td> {{ album["count"] }} tracks.</td>
                                 </td>
                             </tr>
@@ -105,32 +106,11 @@
                         <div class="column is-one-third">
                             <div class = "block">
                                 <p class="title is-4">Top values</p>
-                                <table class="table top-table is-fullwidth">
-                                    <tbody>
-                                        {% for i in range(stat["top_values"]|length) %}
-                                            <tr> 
-                                                <td> {{ i+1 }}. </td> 
-                                                <td> {{ stat["top_titles"][i] }} by {{ stat["top_artists"][i] }}</td>
-                                                <td> {{ stat["top_values"][i]}} </td>
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>  
+                                {{ render_top_table(stat, "top_titles", "top_artists", "top_values") }}
                             </div>
                             <div class = "block">
                                 <p class="title is-4">Lowest values</p>
-                                <table class="table top-table is-fullwidth">
-                                    <tbody>
-                                        {% for i in range(stat["bot_values"]|length) %}
-                                            <tr> 
-                                                <td> {{ i+1 }}. </td> 
-                                                <td> {{ stat["bot_titles"][i] }} by {{ stat["bot_artists"][i] }}</td>
-                                                <td> {{ stat["bot_values"][i]}} </td>
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
+                                {{ render_top_table(stat, "bot_titles", "bot_artists", "bot_values") }}
                                 </table>
                             </div>
                             
@@ -147,3 +127,16 @@
     </div>
 </div>
 {% endblock %}
+
+{% macro render_top_table(stat, col1, col2, col3) -%}
+    <table class="table top-table is-fullwidth">
+        {% for i in range(stat[col1]|length) %}
+            <tr> 
+                <td> {{ i+1 }}. </td> 
+                <td> {{ stat[col1][i] }}
+                    <span class="band-name">{{ stat[col2][i] }}</span></td>
+                <td> {{ stat[col3][i]}} </td>
+            </tr>
+        {% endfor %}
+    </table>
+{%- endmacro %}
