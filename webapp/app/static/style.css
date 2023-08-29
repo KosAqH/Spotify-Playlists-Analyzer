@@ -61,6 +61,11 @@ figure {
     border: 10px solid;
 }
 
+.comp_together .comp-top{
+    width: 70%;
+    aspect-ratio: 1;
+}
+
 .red-border figure{
     border-color: rgb(110, 3, 3);
 }

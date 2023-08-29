@@ -37,6 +37,94 @@
         </div>
     </div>
 
+    <div name="playlist-comp-top" class="columns block comp-top is-comp">
+        <div class="column has-text-left">
+            <div class="block red-border">
+                <p class = "title is-4"> Top artists </p>
+
+                <div class="img-playlist-cover">
+                    <figure class="image is-inline-block">
+                        <img src="{{ playlists_info[0]['top_artist'][0]['url_photo']}}">
+                    </figure>
+                </div>
+
+                <table class="top-table">
+                    <tbody>
+                        {% for artist in playlists_info[0]['top_artist'] %}
+                            <tr> 
+                                <td> {{ loop.index }}. </td> 
+                                <td> {{ artist["name"] }}.</td>
+                                <td> {{ artist["count"] }} tracks.</td>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="block red-border">
+                <p class = "title is-4"> Top albums </p>
+                <div class="img-playlist-cover">
+                    <figure class="image is-inline-block">
+                        <img src="{{ playlists_info[0]['top_album'][0]['url_photo']}}">
+                    </figure>
+                </div>
+                <table class="top-table">
+                    {% for album in playlists_info[0]['top_album'] %}
+                        <tr> 
+                            <td> {{ loop.index }}. </td> 
+                            <td> {{ album["name"] }} 
+                                <span class="band-name">{{ album["artist"]}}.</span> </td>
+                            <td> {{ album["count"] }} tracks.</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            
+        </div>
+        <div class="column has-text-left blue-border">
+            <div class="block">
+                <p class = "title is-4"> Top artists </p>
+
+                <div class="img-playlist-cover">
+                    <figure class="image is-inline-block">
+                        <img src="{{ playlists_info[1]['top_artist'][0]['url_photo']}}">
+                    </figure>
+                </div>
+
+                <table class="top-table">
+                    <tbody>
+                        {% for artist in playlists_info[1]['top_artist'] %}
+                            <tr> 
+                                <td> {{ loop.index }}. </td> 
+                                <td> {{ artist["name"] }}.</td>
+                                <td> {{ artist["count"] }} tracks.</td>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="block">
+                <p class = "title is-4"> Top albums </p>
+                <div class="img-playlist-cover">
+                    <figure class="image is-inline-block">
+                        <img src="{{ playlists_info[1]['top_album'][0]['url_photo']}}">
+                    </figure>
+                </div>
+                <table class="top-table">
+                    {% for album in playlists_info[1]['top_album'] %}
+                        <tr> 
+                            <td> {{ loop.index }}. </td> 
+                            <td> {{ album["name"] }} 
+                                <span class="band-name">{{ album["artist"]}}.</span> </td>
+                            <td> {{ album["count"] }} tracks.</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+
     <div class="content block">
         <p> Playlist n1 contains songs of n unique artists and n unique albums. 
             Playlist n2 contains songs of n unique artists and from n unique albums. 
