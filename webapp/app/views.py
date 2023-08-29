@@ -59,12 +59,9 @@ def index_post():
     for s in statistics:
         statistics_data.append(getSpotifyStatistic(tracks_info, s))
     
-    spotify_url = SpotifyURL()
-
     return render_template('analysis.html', 
                            playlist_info = playlist_meta, 
                            statistics_data = statistics_data, 
-                           url_form = spotify_url #temporary
                            )
 
 @app.route("/analysis")
@@ -81,7 +78,6 @@ def playlists_comparison():
 
 @app.route("/p_comp_post", methods=["POST"])
 def playlists_comparison_post():
-    spotify_url = SpotifyDoubleURL()
     urls = []
     playlists_meta = []
     dfs = []
@@ -129,8 +125,7 @@ def playlists_comparison_post():
     return render_template('playlists_comparison_post.html',
                            playlists_info = playlists_meta,
                            statistics_data = statistics_data,
-                           radar = radar_plot,
-                           url_form = spotify_url)
+                           radar = radar_plot)
 
 
 ##### MOVE IT TO OTHER FILE LATER
