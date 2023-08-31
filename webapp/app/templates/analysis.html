@@ -76,13 +76,22 @@
         <div name="audio-parameters">
             {% for stat in statistics_data %}
                 <div class="block">
-                    <div>
+                    <div class = "block">
                         <p class = "title is-2">{{ stat["name"] |capitalize }} </p>
                         <p class="content"> {{stat["desc"] }} </p>
-                        <p> Staty</p>
+                        <table class="table is-fullwidth">
+                            <tr>
+                                <th> Mean </th> <th> Std. dev.  </th> <th> Min </th> <th> 25% Quantile </th> <th> Median </th> <th> 75% Quantile </th> <th> Max </th>
+                            </tr>
+                            <tr>
+                                {% for _, value in info[stat["name"]].items() %}
+                                    <td> {{ value }} </td>
+                                {% endfor %}
+                            </tr>
+                        </table>
                     </div>
 
-                    <div class="columns">
+                    <div class="columns block">
                         <div class="column is-two-thirds">
                             <div id='{{ stat["name"] }}plot' class='{{ stat["name"] }}plot'></div>
 

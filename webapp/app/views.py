@@ -55,6 +55,8 @@ def index_post():
 
     statistics = ["duration_ms", "tempo", "acousticness", "danceability", "energy", "instrumentalness", "loudness", "valence"]
 
+    info = tracks_info[statistics].describe().round(4).drop("count").to_dict()
+
     statistics_data = []
     for s in statistics:
         statistics_data.append(getSpotifyStatistic(tracks_info, s))
@@ -62,6 +64,7 @@ def index_post():
     return render_template('analysis.html', 
                            playlist_info = playlist_meta, 
                            statistics_data = statistics_data, 
+                           info = info
                            )
 
 @app.route("/analysis")
@@ -120,6 +123,9 @@ def playlists_comparison_post():
     statistics_data = []
     for s in statistics:
         statistics_data.append(getSpotifyComparisonStatistic(df, s))
+
+    info = [dfs[0][statistics].describe().round(4).drop("count").to_dict(),
+            dfs[1][statistics].describe().round(4).drop("count").to_dict()]
     
     radar_plot = createRadarPlot(df)
 
@@ -127,7 +133,8 @@ def playlists_comparison_post():
     return render_template('playlists_comparison_post.html',
                            playlists_info = playlists_meta,
                            statistics_data = statistics_data,
-                           radar = radar_plot)
+                           radar = radar_plot,
+                           info = info)
 
 
 ##### MOVE IT TO OTHER FILE LATER
