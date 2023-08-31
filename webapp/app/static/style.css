@@ -52,6 +52,11 @@ figure {
     border-radius: 5%;
 }
 
+.img-playlist-cover-small {
+    width: 80%;
+    margin: auto;
+}
+
 .is-comp figure{
     border: 10px solid;
     

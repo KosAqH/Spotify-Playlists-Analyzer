@@ -23,32 +23,36 @@
     </div>
 
     <div name="playlist-info" class="columns block">
-        <div class="column has-text-left">
-            <p class = "title is-1"> <a href="{{ playlists_info[0]['url'] }}" class="no-hover-links" target="_blank"> {{ playlists_info[0]['name'] }} </a> </p>
-            <p class = "subtitle is-3"> created by {{ playlists_info[0]['creator'] }}</p>
-            <p> Total count: {{ playlists_info[0]['total_count'] }} tracks. </p>
-            <p> Total duration: {{ playlists_info[0]['hours'] }} hours and {{ playlists_info[0]['minutes'] }} minutes. </p>
+        <div class="columns column has-text-left is-half">
+            <div class="column is-8 is-offset-2">
+                <p class = "title is-1"> <a href="{{ playlists_info[0]['url'] }}" class="no-hover-links" target="_blank"> {{ playlists_info[0]['name'] }} </a> </p>
+                <p class = "subtitle is-3"> created by {{ playlists_info[0]['creator'] }}</p>
+                <p> Total count: {{ playlists_info[0]['total_count'] }} tracks. </p>
+                <p> Total duration: {{ playlists_info[0]['hours'] }} hours and {{ playlists_info[0]['minutes'] }} minutes. </p>
+            </div>
         </div>
-        <div class="column has-text-left">
-            <p class = "title is-1"> <a href="{{ playlists_info[1]['url'] }}" class="no-hover-links" target="_blank"> {{ playlists_info[1]['name'] }} </a> </p>
-            <p class = "subtitle is-3"> created by {{ playlists_info[1]['creator'] }}</p>
-            <p> Total count: {{ playlists_info[1]['total_count'] }} tracks. </p>
-            <p> Total duration: {{ playlists_info[1]['hours'] }} hours and {{ playlists_info[1]['minutes'] }} minutes. </p>
+        <div class="columns column has-text-left is-half">
+            <div class="column is-8 is-offset-2">
+                <p class = "title is-1"> <a href="{{ playlists_info[1]['url'] }}" class="no-hover-links" target="_blank"> {{ playlists_info[1]['name'] }} </a> </p>
+                <p class = "subtitle is-3"> created by {{ playlists_info[1]['creator'] }}</p>
+                <p> Total count: {{ playlists_info[1]['total_count'] }} tracks. </p>
+                <p> Total duration: {{ playlists_info[1]['hours'] }} hours and {{ playlists_info[1]['minutes'] }} minutes. </p>
+            </div>
         </div>
     </div>
 
     <div name="playlist-comp-top" class="columns block comp-top is-comp">
-        <div class="column has-text-left">
+        <div class="column">
             <div class="block red-border">
                 <p class = "title is-4"> Top artists </p>
 
-                <div class="img-playlist-cover">
+                <div class="img-playlist-cover img-playlist-cover-small block">
                     <figure class="image is-inline-block">
                         <img src="{{ playlists_info[0]['top_artist'][0]['url_photo']}}">
                     </figure>
                 </div>
 
-                <table class="top-table">
+                <table class="table top-table is-fullwidth">
                     <tbody>
                         {% for artist in playlists_info[0]['top_artist'] %}
                             <tr> 
@@ -63,12 +67,12 @@
             </div>
             <div class="block red-border">
                 <p class = "title is-4"> Top albums </p>
-                <div class="img-playlist-cover">
+                <div class="img-playlist-cover img-playlist-cover-small block">
                     <figure class="image is-inline-block">
                         <img src="{{ playlists_info[0]['top_album'][0]['url_photo']}}">
                     </figure>
                 </div>
-                <table class="top-table">
+                <table class="table top-table is-fullwidth">
                     {% for album in playlists_info[0]['top_album'] %}
                         <tr> 
                             <td> {{ loop.index }}. </td> 
@@ -81,22 +85,22 @@
             </div>
             
         </div>
-        <div class="column has-text-left blue-border">
+        <div class="column blue-border">
             <div class="block">
                 <p class = "title is-4"> Top artists </p>
 
-                <div class="img-playlist-cover">
+                <div class="img-playlist-cover img-playlist-cover-small block">
                     <figure class="image is-inline-block">
                         <img src="{{ playlists_info[1]['top_artist'][0]['url_photo']}}">
                     </figure>
                 </div>
 
-                <table class="top-table">
+                <table class="table top-table is-fullwidth">
                     <tbody>
                         {% for artist in playlists_info[1]['top_artist'] %}
                             <tr> 
                                 <td> {{ loop.index }}. </td> 
-                                <td> {{ artist["name"] }}.</td>
+                                <td> {{ artist["name"] }}</td>
                                 <td> {{ artist["count"] }} tracks.</td>
                                 </td>
                             </tr>
@@ -106,12 +110,12 @@
             </div>
             <div class="block">
                 <p class = "title is-4"> Top albums </p>
-                <div class="img-playlist-cover">
+                <div class="img-playlist-cover img-playlist-cover-small block">
                     <figure class="image is-inline-block">
                         <img src="{{ playlists_info[1]['top_album'][0]['url_photo']}}">
                     </figure>
                 </div>
-                <table class="top-table">
+                <table class="table top-table is-fullwidth">
                     {% for album in playlists_info[1]['top_album'] %}
                         <tr> 
                             <td> {{ loop.index }}. </td> 
