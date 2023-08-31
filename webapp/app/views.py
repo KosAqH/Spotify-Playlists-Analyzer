@@ -122,6 +122,8 @@ def playlists_comparison_post():
         statistics_data.append(getSpotifyComparisonStatistic(df, s))
     
     radar_plot = createRadarPlot(df)
+
+    print(playlists_meta[1])
     return render_template('playlists_comparison_post.html',
                            playlists_info = playlists_meta,
                            statistics_data = statistics_data,
@@ -143,7 +145,10 @@ def createRadarPlot(df):
     new_df["means"] = means1+means2
     new_df["playlist"] = [0,0,0,0,0,1,1,1,1,1]
 
-    fig = px.line_polar(new_df, r="means", theta = new_df.index, color="playlist", line_close=True, markers=True)
+    fig = px.line_polar(new_df, r="means", theta = new_df.index, color="playlist", 
+                        color_discrete_sequence = ["Red", "Blue"],
+                        labels= ["Playlist left", "Playlist right"],
+                        line_close=True, markers=True)
     fig.update_traces(fill='toself')
 
     figJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
@@ -185,8 +190,9 @@ def getSpotifyComparisonStatistic(df: pd.DataFrame, stat_name):
     bot_val = df[stat_name].min()
 
     fig = ff.create_distplot([l1, l2],
-                             ["p1", "p2"],
-                             bin_size=((top_val-bot_val) / 10) 
+                             ["Playlist left", "Playlist right"],
+                             bin_size=((top_val-bot_val) / 10),
+                             colors = ["Red", "Blue"] 
         )
     figJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
@@ -245,8 +251,8 @@ def getTopNumerical(df: pd.DataFrame, column: str, topn: int, add_exaquo = False
 
 def getTop(df: pd.DataFrame, column, topn, api: SpotifyApi, add_exaquo = False):
     max_value = df[column].value_counts().max()
-    if max_value == 1:
-        return {}
+    # if max_value == 1:
+    #     return {}
     
     extracted_data = df[column].value_counts().head(topn)
     keys = list(df[column].value_counts().head(topn).index)
