@@ -4,8 +4,10 @@ from app.forms import SpotifyURL, SpotifyDoubleURL
 import pandas as pd
 
 from .spotify_api.spotify_api import SpotifyApi
-from .spotify_api.spotify_utils import get_token, load_playlist_info, extractIdFromURL
+from .spotify_api.spotify_utils import get_token, load_playlist_info, extractIdFromURL, UpdatePlaylistMeta
 from .spotify_api.audio_data import AudioData
+
+STATISTICS = ["duration_s", "tempo", "acousticness", "danceability", "energy", "instrumentalness", "loudness", "valence"]
 
 @app.route("/")
 def index():
@@ -18,6 +20,7 @@ def index():
 
 @app.route("/index_post", methods=["POST"])
 def index_post():
+    ad = AudioData()
 
     if request.form.get('url'):
         url = request.form.get('url')
@@ -28,27 +31,16 @@ def index_post():
     token = get_token()
     api = SpotifyApi(token)
 
-    # p = api.RequestPlaylist(id)
     playlist_meta = api.retrievePlaylistMetadata(id)
 
     ids = api.retrieveIdsFromPlaylist(id, playlist_meta["total_count"])
-    tracks_info = load_playlist_info(api, ids)
+    tracks_info = load_playlist_info(api, ids)      
 
-    ad = AudioData()
-    playlist_meta["total_minutes"] = round(ad.GetTotalDuration(tracks_info, unit="min"))
-    playlist_meta["hours"] = playlist_meta["total_minutes"] // 60
-    playlist_meta["minutes"] = playlist_meta["total_minutes"] % 60
-    playlist_meta["top_artist"] = ad.getTop(tracks_info, "artist_id", 3, api)
-    playlist_meta["top_album"] = ad.getTop(tracks_info, "album_id", 3, api)
-    playlist_meta["top_genre"] = "placeholder"
-    playlist_meta["total_count"] = tracks_info.shape[0]
-    print(playlist_meta)
-    statistics = ["duration_s", "tempo", "acousticness", "danceability", "energy", "instrumentalness", "loudness", "valence"]
-
-    info = tracks_info[statistics].describe().round(4).drop("count").to_dict()
+    playlist_meta = UpdatePlaylistMeta(playlist_meta, ad, tracks_info, api)
+    info = tracks_info[STATISTICS].describe().round(4).drop("count").to_dict()
 
     statistics_data = []
-    for s in statistics:
+    for s in STATISTICS:
         statistics_data.append(ad.getSpotifyStatistic(tracks_info, s))
     
     return render_template('analysis.html', 
@@ -65,34 +57,21 @@ def playlists_comparison_post():
 
     token = get_token()
     api = SpotifyApi(token)
+    ad = AudioData()
 
     if request.form.get('url1') and request.form.get('url2'):
         urls += [request.form.get('url1'), request.form.get('url2')]
 
     for url in urls:
         id = extractIdFromURL(url)
-        if not id:
-            id = url
-        # p = api.RequestPlaylist(id)
         playlist_meta = api.retrievePlaylistMetadata(id)
         
-
         ids = api.retrieveIdsFromPlaylist(id, playlist_meta["total_count"])
         tracks_info = load_playlist_info(api, ids)
         dfs.append(tracks_info)
 
-        ad = AudioData()
-        playlist_meta["total_minutes"] = round(ad.GetTotalDuration(tracks_info, unit="min"))
-        playlist_meta["hours"] = playlist_meta["total_minutes"] // 60
-        playlist_meta["minutes"] = playlist_meta["total_minutes"] % 60
-        playlist_meta["top_artist"] = ad.getTop(tracks_info, "artist_id", 3, api)
-        playlist_meta["top_album"] = ad.getTop(tracks_info, "album_id", 3, api)
-        playlist_meta["top_genre"] = "placeholder"
-        playlist_meta["total_count"] = tracks_info.shape[0]
-
+        playlist_meta = UpdatePlaylistMeta(playlist_meta, ad, tracks_info, api)
         playlists_meta.append(playlist_meta)
-
-    statistics = ["duration_s", "tempo", "acousticness", "danceability", "energy", "instrumentalness", "loudness", "valence"]
 
     dfs[0]["no"] = 1
     dfs[1]["no"] = 2
@@ -100,15 +79,14 @@ def playlists_comparison_post():
     df = pd.concat([dfs[0], dfs[1]], axis=0)
 
     statistics_data = []
-    for s in statistics:
+    for s in STATISTICS:
         statistics_data.append(ad.getSpotifyComparisonStatistic(df, s))
 
-    info = [dfs[0][statistics].describe().round(4).drop("count").to_dict(),
-            dfs[1][statistics].describe().round(4).drop("count").to_dict()]
+    info = [dfs[0][STATISTICS].describe().round(4).drop("count").to_dict(),
+            dfs[1][STATISTICS].describe().round(4).drop("count").to_dict()]
     
     radar_plot = ad.createRadarPlot(df)
 
-    print(playlists_meta[1])
     return render_template('playlists_comparison_post.html',
                            playlists_info = playlists_meta,
                            statistics_data = statistics_data,

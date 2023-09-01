@@ -77,6 +77,29 @@ def extractIdFromURL(url: str) -> str:
         return match.group()
     else:
         return url
+    
+def UpdatePlaylistMeta(playlist_meta: dict, ad: AudioData, tracks_info: pd.DataFrame, api: SpotifyApi) -> dict:
+    """
+    Function updating playlist metadata dictionary with top tracks and albums, count of tracks and duration of tracks.
+
+        Args:
+            playlist_meta (dict) - dictionary with metadata of playlist
+            ad (AudioData) - initialized object AudioData
+            tracks_info (pd.Dataframe) - df containing tracks data
+            api (SpotifyApi) - initialized object SpotifyApi
+
+        Returns:
+            playlist_meta (dict) - updated dictionary
+    """
+    playlist_meta["total_minutes"] = round(ad.GetTotalDuration(tracks_info, unit="min"))
+    playlist_meta["hours"] = playlist_meta["total_minutes"] // 60
+    playlist_meta["minutes"] = playlist_meta["total_minutes"] % 60
+    playlist_meta["top_artist"] = ad.getTop(tracks_info, "artist_id", 3, api)
+    playlist_meta["top_album"] = ad.getTop(tracks_info, "album_id", 3, api)
+    playlist_meta["top_genre"] = "placeholder"
+    playlist_meta["total_count"] = tracks_info.shape[0]
+
+    return playlist_meta
 
 if __name__ == "__main__":
     pass

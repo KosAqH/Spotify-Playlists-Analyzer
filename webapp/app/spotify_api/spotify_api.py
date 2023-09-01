@@ -163,5 +163,5 @@ class SpotifyApi:
                 "img_url": playlist["images"][0]["url"],
                 "url": playlist["external_urls"]["spotify"]
             }
-        
+
         return d
