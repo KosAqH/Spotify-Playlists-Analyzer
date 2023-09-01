@@ -53,7 +53,7 @@ def index_post():
     playlist_meta["top_genre"] = "placeholder"
     playlist_meta["total_count"] = tracks_info.shape[0]
 
-    statistics = ["duration_ms", "tempo", "acousticness", "danceability", "energy", "instrumentalness", "loudness", "valence"]
+    statistics = ["duration_s", "tempo", "acousticness", "danceability", "energy", "instrumentalness", "loudness", "valence"]
 
     info = tracks_info[statistics].describe().round(4).drop("count").to_dict()
 
@@ -113,7 +113,7 @@ def playlists_comparison_post():
 
         playlists_meta.append(playlist_meta)
 
-    statistics = ["duration_ms", "tempo", "acousticness", "danceability", "energy", "instrumentalness", "loudness", "valence"]
+    statistics = ["duration_s", "tempo", "acousticness", "danceability", "energy", "instrumentalness", "loudness", "valence"]
 
     dfs[0]["no"] = 1
     dfs[1]["no"] = 2

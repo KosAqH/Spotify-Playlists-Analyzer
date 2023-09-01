@@ -11,6 +11,7 @@ class AudioData:
                                    left_index=True, 
                                    right_index=True,
                                    )
+        new_df["duration_s"] = new_df["duration_ms"] / 1000
         return new_df
     
     def GetTotalDuration(self, df: pd.DataFrame, unit = "second") -> float:
