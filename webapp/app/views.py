@@ -11,7 +11,7 @@ import re
 
 from .spotify_api.spotify_connection import SpotifyConn
 from .spotify_api.spotify_api import SpotifyApi
-from .spotify_api.spotify_utils import load_credentials, load_playlist_info
+from .spotify_api.spotify_utils import get_token, load_playlist_info
 from .spotify_api.audio_data import AudioData
 
 @app.route("/")
@@ -32,7 +32,7 @@ def index_post():
         if not id:
             id = url
 
-    token = get_spotify_access_token()
+    token = get_token()
     api = SpotifyApi(token)
 
     # p = api.RequestPlaylist(id)
@@ -70,7 +70,7 @@ def playlists_comparison_post():
     playlists_meta = []
     dfs = []
 
-    token = get_spotify_access_token()
+    token = get_token()
     api = SpotifyApi(token)
 
     if request.form.get('url1') and request.form.get('url2'):
@@ -293,9 +293,3 @@ def extractIdFromURL(url: str) -> str:
     else:
         return url
 
-def get_spotify_access_token():
-    api_key, api_secret = load_credentials()
-    conn = SpotifyConn()
-    conn.authorize(api_key, api_secret)
-    token = conn.get_access_token()
-    return token
