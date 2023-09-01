@@ -11,6 +11,9 @@ STATISTICS = ["duration_s", "tempo", "acousticness", "danceability", "energy", "
 
 @app.route("/")
 def index():
+    """
+    View rendering main page.
+    """
     spotify_url = SpotifyURL()
     spotify_double_url = SpotifyDoubleURL()
 
@@ -20,6 +23,9 @@ def index():
 
 @app.route("/index_post", methods=["POST"])
 def index_post():
+    """
+    View rendering page with analysis of one playlist.
+    """
     ad = AudioData()
 
     if request.form.get('url'):
@@ -51,6 +57,9 @@ def index_post():
 
 @app.route("/p_comp_post", methods=["POST"])
 def playlists_comparison_post():
+    """
+    View rendering page with comparison of two playlists.
+    """
     urls = []
     playlists_meta = []
     dfs = []
