@@ -79,6 +79,18 @@ figure {
     border-color: rgb(7, 47, 99);
 }
 
+.red-border-div{
+    border-color: rgb(110, 3, 3);
+    border-width: 4px 0;
+    border-style: solid;
+}
+
+.blue-border-div{
+    border-color: rgb(7, 47, 99);
+    border-width: 4px 0;
+    border-style: solid;
+}
+
 .no-hover-links{
     text-decoration: none; /* no underline */
     color: inherit;
