@@ -14,9 +14,6 @@ from .spotify_api.spotify_api import SpotifyApi
 from .spotify_api.spotify_utils import load_credentials, load_playlist_info
 from .spotify_api.audio_data import AudioData
 
-
-# main = Blueprint('main', __name__) only for blueprints
-
 @app.route("/")
 def index():
     spotify_url = SpotifyURL()
@@ -38,8 +35,8 @@ def index_post():
     token = get_spotify_access_token()
     api = SpotifyApi(token)
 
-    p = api.RequestPlaylist(id)
-    playlist_meta = api.RetrievePlaylistMetadata(p)
+    # p = api.RequestPlaylist(id)
+    playlist_meta = api.retrievePlaylistMetadata(id)
 
     ids = api.retrieveIdsFromPlaylist(id, playlist_meta["total_count"])
     tracks_info = load_playlist_info(api, ids)
@@ -67,18 +64,6 @@ def index_post():
                            info = info
                            )
 
-@app.route("/analysis")
-def analysis():
-    return render_template('analysis.html')
-
-@app.route("/p_comp")
-def playlists_comparison():
-    spotify_url = SpotifyDoubleURL()
-
-
-    return render_template('playlists_comparison.html',
-                           url_form = spotify_url)
-
 @app.route("/p_comp_post", methods=["POST"])
 def playlists_comparison_post():
     urls = []
@@ -95,8 +80,9 @@ def playlists_comparison_post():
         id = extractIdFromURL(url)
         if not id:
             id = url
-        p = api.RequestPlaylist(id)
-        playlist_meta = api.RetrievePlaylistMetadata(p)
+        # p = api.RequestPlaylist(id)
+        playlist_meta = api.retrievePlaylistMetadata(id)
+        
 
         ids = api.retrieveIdsFromPlaylist(id, playlist_meta["total_count"])
         tracks_info = load_playlist_info(api, ids)
