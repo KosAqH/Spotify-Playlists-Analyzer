@@ -1,6 +1,8 @@
 import os
 from dotenv import load_dotenv
 import pandas as pd
+import re
+
 from app.spotify_api.audio_data import AudioData
 from app.spotify_api.spotify_api import SpotifyApi
 from app.spotify_api.spotify_connection import SpotifyConn
@@ -55,6 +57,26 @@ def get_token() -> str:
     conn.authorize(api_key, api_secret)
     token = conn.get_access_token()
     return token
+
+def extractIdFromURL(url: str) -> str:
+    """
+    Function extracts playlist's id from playlist's url. If id isn't found then function
+    assumes that passed value was an id itself.
+
+        Arg:
+            url (str) - string containing spotify playlist's url or id
+
+        Returns:
+            id (str) - extracted playlist's id
+    """
+
+    pattern = "(?<=playlist/).*(?=\?)" 
+    # looking for all chars between 'playlist/' phrase and '?' char
+    match = re.search(pattern, url)
+    if match:
+        return match.group()
+    else:
+        return url
 
 if __name__ == "__main__":
     pass
