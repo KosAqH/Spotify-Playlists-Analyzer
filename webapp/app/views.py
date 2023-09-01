@@ -151,6 +151,7 @@ def createRadarPlot(df):
     new_df = pd.DataFrame(columns=["means", "playlist"], index=columns*2)
     new_df["means"] = means1+means2
     new_df["playlist"] = [0,0,0,0,0,1,1,1,1,1]
+    new_df["playlist"].replace({0:"Playlist left", 1:"Playlist right" }, inplace=True)
 
     fig = px.line_polar(new_df, r="means", theta = new_df.index, color="playlist", 
                         color_discrete_sequence = ["Red", "Blue"],
@@ -190,8 +191,19 @@ def getSpotifyComparisonStatistic(df: pd.DataFrame, stat_name):
     df1 = df[df["no"] == 1].drop_duplicates('id')
     df2 = df[df["no"] == 2].drop_duplicates('id')
 
-    l1 = df[df["no"] == 1][stat_name].to_list()
-    l2 = df[df["no"] == 2][stat_name].to_list()
+    l1 = df1[stat_name].to_list()
+    l2 = df2[stat_name].to_list()
+    ar1 = df1["artist_name"].to_list()
+    ar2 = df2["artist_name"].to_list()
+    t1 = df1["name"].to_list()
+    t2 = df2["name"].to_list()
+    r1 = []
+    r2 = []
+
+    for i in range(len(ar1)):
+        r1.append(f"{t1[i]} by {ar1[i]}")
+    for i in range(len(ar2)):
+        r2.append(f"{t2[i]} by {ar2[i]}")
 
     top_val = df[stat_name].max()
     bot_val = df[stat_name].min()
@@ -199,6 +211,7 @@ def getSpotifyComparisonStatistic(df: pd.DataFrame, stat_name):
     fig = ff.create_distplot([l1, l2],
                              ["Playlist left", "Playlist right"],
                              bin_size=((top_val-bot_val) / 10),
+                             rug_text  = [r1, r2],
                              colors = ["Red", "Blue"] 
         )
     fig.update_layout(legend = dict(traceorder = "normal"))
