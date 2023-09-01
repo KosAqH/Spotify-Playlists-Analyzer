@@ -201,6 +201,7 @@ def getSpotifyComparisonStatistic(df: pd.DataFrame, stat_name):
                              bin_size=((top_val-bot_val) / 10),
                              colors = ["Red", "Blue"] 
         )
+    fig.update_layout(legend = dict(traceorder = "normal"))
     figJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
     stats_description = {}
