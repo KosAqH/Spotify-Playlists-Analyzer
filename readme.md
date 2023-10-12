@@ -19,6 +19,10 @@ Data source: Spotify API: https://developer.spotify.com/documentation/web-api
 8. Create file `.env` in `Spotify-Playlists-Analyzer\webapp` directory. Retrieve client ID and client secret from settings page of your spotify app. Then put those informations in `.env` file (there is an example in repository: `Spotify-Playlists-Analyzer\webapp\.env.example`)
 9. Change working directory to `Spotify-Playlists-Analyzer\`. Run app with command `python webapp\run.py`
 
->?Warning: for running notebooks from experiments directory you should also install notebook package
+>[!WARNING]
+> To run notebooks from experiments directory you should also install notebook python package
 
 ### Showcase
+https://github.com/KosAqH/Spotify-Playlists-Analyzer/assets/82679650/607cdc1d-7536-449e-8293-895fe64491c3
+
+
